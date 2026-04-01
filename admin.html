@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compralo Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['DM Sans', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: { 400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857' },
+            surface: { 0: '#0a0a0a', 1: '#111111', 2: '#1a1a1a', 3: '#222222' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'DM Sans', system-ui, sans-serif; }
+    body { background: #0a0a0a; color: #e5e5e5; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+    .glass { background: rgba(17,17,17,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); }
+    .glass-strong { background: rgba(17,17,17,0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.08); }
+
+    .stat-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+
+    .sidebar-link { transition: all 0.15s ease; }
+    .sidebar-link:hover { background: rgba(255,255,255,0.04); }
+    .sidebar-link.active { background: rgba(16,185,129,0.1); color: #10b981; border-right: 2px solid #10b981; }
+
+    .table-row { transition: background 0.1s ease; }
+    .table-row:hover { background: rgba(255,255,255,0.03); }
+
+    .modal-overlay { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+
+    .badge { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.03em; padding: 3px 10px; border-radius: 9999px; text-transform: uppercase; }
+    .badge-pendiente { background: rgba(250,204,21,0.12); color: #facc15; }
+    .badge-confirmado { background: rgba(59,130,246,0.12); color: #60a5fa; }
+    .badge-enviado { background: rgba(168,85,247,0.12); color: #c084fc; }
+    .badge-entregado { background: rgba(34,197,94,0.12); color: #4ade80; }
+    .badge-cancelado { background: rgba(239,68,68,0.12); color: #f87171; }
+
+    input, select, textarea {
+      background: #1a1a1a !important; border: 1px solid rgba(255,255,255,0.1) !important;
+      color: #e5e5e5 !important; transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #10b981 !important; outline: none;
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.1) !important;
+    }
+
+    .btn-primary {
+      background: #10b981; color: white; font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .btn-primary:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+
+    .btn-ghost {
+      background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #a3a3a3;
+      transition: all 0.15s ease;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.04); color: #e5e5e5; border-color: rgba(255,255,255,0.2); }
+
+    .fade-in { animation: fadeIn 0.3s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .slide-up { animation: slideUp 0.25s ease forwards; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .pulse-dot { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    @media (max-width: 1023px) {
+      .sidebar { transform: translateX(-100%); position: fixed; z-index: 40; height: 100vh; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 35; }
+      .sidebar-overlay.open { display: block; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- ==================== LOGIN ==================== -->
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-sm fade-in">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-500/10 mb-4">
+          <svg class="w-8 h-8 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+        </div>
+        <h1 class="text-2xl font-bold tracking-tight">Compralo Admin</h1>
+        <p class="text-gray-500 text-sm mt-1">Ingresa tu clave de administrador</p>
+      </div>
+      <div class="glass-strong rounded-2xl p-6">
+        <label class="text-xs font-medium text-gray-400 mb-1.5 block">Clave de acceso</label>
+        <input id="loginPass" type="password" placeholder="Ingresa la clave..."
+          class="w-full px-4 py-3 rounded-xl text-sm mb-4"
+          onkeydown="if(event.key==='Enter')doLogin()">
+        <button onclick="doLogin()" class="btn-primary w-full py-3 rounded-xl text-sm">
+          Acceder al panel
+        </button>
+        <p id="loginError" class="text-red-400 text-xs text-center mt-3 hidden">Clave incorrecta. Intenta nuevamente.</p>
+      </div>
+      <p class="text-center text-gray-600 text-xs mt-6">Panel protegido. Acceso solo para administradores.</p>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN LAYOUT ==================== -->
+  <div id="adminPanel" class="hidden min-h-screen">
+
+    <!-- Sidebar overlay (mobile) -->
+    <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 h-screen w-60 bg-surface-1 border-r border-white/[0.06] flex flex-col transition-transform duration-200 lg:translate-x-0 z-40">
+      <!-- Logo -->
+      <div class="px-5 h-16 flex items-center gap-2.5 border-b border-white/[0.06]">
+        <div class="w-8 h-8 rounded-lg bg-brand-500/15 flex items-center justify-center">
+          <svg class="w-4 h-4 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+        </div>
+        <div>
+          <span class="font-bold text-sm">Compralo</span>
+          <span class="text-[10px] text-gray-500 bg-white/5 px-1.5 py-0.5 rounded ml-1.5">Admin</span>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex-1 py-3 px-2.5 space-y-0.5">
+        <button onclick="showTab('dashboard')" id="navDashboard" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left">
+          <svg class="w-[18px] h-[18px] opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zm0 7a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1h-4a1 1 0 01-1-1v-5zm-10-2a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1v-5z"/>
+          </svg>
+          Dashboard
+        </button>
+        <button onclick="showTab('productos')" id="navProductos" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 text-left">
+          <svg class="w-[18px] h-[18px] opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+          Productos
+        </button>
+        <button onclick="showTab('pedidos')" id="navPedidos" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 text-left">
+          <svg class="w-[18px] h-[18px] opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+          </svg>
+          Pedidos
+        </button>
+      </nav>
+
+      <!-- User / Logout -->
+      <div class="px-3 py-3 border-t border-white/[0.06]">
+        <button onclick="doLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-500 hover:text-red-400 hover:bg-red-500/5 transition-colors">
+          <svg class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          Cerrar sesion
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="lg:ml-60 min-h-screen">
+      <!-- Top bar -->
+      <header class="h-16 border-b border-white/[0.06] glass-strong sticky top-0 z-30 flex items-center justify-between px-4 lg:px-8">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleSidebar()" class="lg:hidden p-2 -ml-2 text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+          <h1 id="pageTitle" class="text-lg font-semibold">Dashboard</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:flex items-center gap-2 text-xs text-gray-500">
+            <span class="w-2 h-2 rounded-full bg-brand-500 pulse-dot"></span>
+            En linea
+          </span>
+          <a href="/" target="_blank" class="btn-ghost px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+            Ver tienda
+          </a>
+        </div>
+      </header>
+
+      <main class="p-4 lg:p-8 max-w-[1400px]">
+
+        <!-- ==================== DASHBOARD ==================== -->
+        <section id="secDashboard" class="fade-in">
+          <!-- Stats -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+            <div class="stat-card glass rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Productos</span>
+                <div class="w-9 h-9 rounded-xl bg-brand-500/10 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                </div>
+              </div>
+              <p id="statProductos" class="text-3xl font-bold tracking-tight">--</p>
+              <p class="text-xs text-gray-500 mt-1">Total en catalogo</p>
+            </div>
+            <div class="stat-card glass rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Pedidos hoy</span>
+                <div class="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                </div>
+              </div>
+              <p id="statPedidosHoy" class="text-3xl font-bold tracking-tight">--</p>
+              <p class="text-xs text-gray-500 mt-1">Nuevos pedidos</p>
+            </div>
+            <div class="stat-card glass rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Ingresos del mes</span>
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+              </div>
+              <p id="statIngresos" class="text-3xl font-bold tracking-tight">--</p>
+              <p class="text-xs text-gray-500 mt-1">Facturacion acumulada</p>
+            </div>
+            <div class="stat-card glass rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Stock bajo</span>
+                <div class="w-9 h-9 rounded-xl bg-orange-500/10 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+              </div>
+              <p id="statStockBajo" class="text-3xl font-bold tracking-tight">--</p>
+              <p class="text-xs text-gray-500 mt-1">Productos con stock &lt; 5</p>
+            </div>
+          </div>
+
+          <!-- Recent Orders -->
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+              <h3 class="font-semibold text-sm">Pedidos recientes</h3>
+              <button onclick="showTab('pedidos')" class="text-xs text-brand-500 hover:text-brand-400 transition-colors">Ver todos</button>
+            </div>
+            <div id="recentOrdersList" class="divide-y divide-white/[0.04]">
+              <div class="px-5 py-8 text-center text-gray-500 text-sm">Cargando...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== PRODUCTS ==================== -->
+        <section id="secProductos" class="hidden fade-in">
+          <!-- Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+            <div>
+              <p class="text-sm text-gray-400"><span id="productCount">0</span> productos en total</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="relative">
+                <svg class="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input id="searchProducts" type="text" placeholder="Buscar producto..."
+                  class="pl-9 pr-4 py-2 rounded-xl text-sm w-full sm:w-64"
+                  oninput="filterProducts()">
+              </div>
+              <button onclick="openNewProductModal()" class="btn-primary px-4 py-2 rounded-xl text-sm whitespace-nowrap flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                Agregar
+              </button>
+            </div>
+          </div>
+
+          <!-- Products Table -->
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-white/[0.06]">
+                    <th class="text-left px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
+                    <th class="text-left px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Marca</th>
+                    <th class="text-right px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
+                    <th class="text-right px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                    <th class="text-center px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                    <th class="text-right px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="productosTableBody" class="divide-y divide-white/[0.04]"></tbody>
+              </table>
+            </div>
+            <div id="noProducts" class="hidden px-5 py-12 text-center text-gray-500 text-sm">
+              No se encontraron productos.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== ORDERS ==================== -->
+        <section id="secPedidos" class="hidden fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+            <div>
+              <p class="text-sm text-gray-400"><span id="orderCount">0</span> pedidos en total</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <select id="filterEstado" onchange="filterPedidos()" class="px-3 py-2 rounded-xl text-sm">
+                <option value="">Todos los estados</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="confirmado">Confirmado</option>
+                <option value="enviado">Enviado</option>
+                <option value="entregado">Entregado</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="pedidosList" class="space-y-3"></div>
+          <div id="noPedidos" class="hidden glass rounded-2xl px-5 py-12 text-center">
+            <svg class="w-12 h-12 text-gray-700 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            <p class="text-gray-500 text-sm">No hay pedidos registrados.</p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==================== PRODUCT MODAL ==================== -->
+  <div id="productModal" class="fixed inset-0 modal-overlay z-50 hidden items-center justify-center p-4">
+    <div class="bg-surface-1 border border-white/[0.08] rounded-2xl w-full max-w-lg relative max-h-[90vh] overflow-y-auto slide-up">
+      <!-- Modal header -->
+      <div class="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between sticky top-0 bg-surface-1 rounded-t-2xl z-10">
+        <h3 id="productModalTitle" class="font-semibold">Nuevo Producto</h3>
+        <button onclick="closeProductModal()" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="productForm" onsubmit="saveProduct(event)" class="p-6 space-y-4">
+        <input type="hidden" id="pf_id">
+
+        <div>
+          <label class="text-xs font-medium text-gray-400 mb-1.5 block">Nombre del producto</label>
+          <input id="pf_nombre" required class="w-full px-4 py-2.5 rounded-xl text-sm" placeholder="ej: Samsung Galaxy S24 Ultra">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-medium text-gray-400 mb-1.5 block">Marca</label>
+            <input id="pf_marca" class="w-full px-4 py-2.5 rounded-xl text-sm" placeholder="ej: Samsung">
+          </div>
+          <div>
+            <label class="text-xs font-medium text-gray-400 mb-1.5 block">Categoria</label>
+            <input id="pf_categoria" class="w-full px-4 py-2.5 rounded-xl text-sm" placeholder="ej: Smartphones">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-medium text-gray-400 mb-1.5 block">Precio</label>
+            <input id="pf_precio" type="number" required class="w-full px-4 py-2.5 rounded-xl text-sm" placeholder="0">
+          </div>
+          <div>
+            <label class="text-xs font-medium text-gray-400 mb-1.5 block">Precio anterior</label>
+            <input id="pf_precioAnterior" type="number" class="w-full px-4 py-2.5 rounded-xl text-sm" placeholder="Opcional">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-medium text-gray-400 mb-1.5 block">Stock</label>
+          <input id="pf_stock" type="number" class="w-full px-4 py-2.5 rounded-xl text-sm" placeholder="0">
+        </div>
+
+        <div class="flex items-center gap-6">
+          <label class="flex items-center gap-2 text-sm cursor-pointer select-none">
+            <input id="pf_destacado" type="checkbox" class="w-4 h-4 accent-emerald-500 rounded">
+            <span class="text-gray-300">Destacado</span>
+          </label>
+          <label class="flex items-center gap-2 text-sm cursor-pointer select-none">
+            <input id="pf_nuevo" type="checkbox" class="w-4 h-4 accent-emerald-500 rounded">
+            <span class="text-gray-300">Nuevo</span>
+          </label>
+        </div>
+
+        <div>
+          <label class="text-xs font-medium text-gray-400 mb-1.5 block">Especificaciones</label>
+          <input id="pf_specs" class="w-full px-4 py-2.5 rounded-xl text-sm" placeholder="128GB, 8GB RAM, 50MP, 6.5&quot; (separadas por coma)">
+        </div>
+
+        <div>
+          <label class="text-xs font-medium text-gray-400 mb-1.5 block">URL de imagen</label>
+          <input id="pf_imagen" class="w-full px-4 py-2.5 rounded-xl text-sm" placeholder="https://ejemplo.com/imagen.jpg">
+        </div>
+
+        <!-- Modal footer -->
+        <div class="flex items-center gap-3 pt-2">
+          <button type="button" onclick="closeProductModal()" class="btn-ghost flex-1 py-2.5 rounded-xl text-sm">Cancelar</button>
+          <button type="submit" class="btn-primary flex-1 py-2.5 rounded-xl text-sm">Guardar producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== DELETE CONFIRM MODAL ==================== -->
+  <div id="deleteModal" class="fixed inset-0 modal-overlay z-50 hidden items-center justify-center p-4">
+    <div class="bg-surface-1 border border-white/[0.08] rounded-2xl w-full max-w-sm p-6 slide-up text-center">
+      <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h3 class="font-semibold mb-1">Desactivar producto</h3>
+      <p class="text-sm text-gray-400 mb-5">El producto se marcara como inactivo y no sera visible en la tienda.</p>
+      <div class="flex items-center gap-3">
+        <button onclick="closeDeleteModal()" class="btn-ghost flex-1 py-2.5 rounded-xl text-sm">Cancelar</button>
+        <button id="confirmDeleteBtn" class="flex-1 py-2.5 rounded-xl text-sm font-semibold bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors">Desactivar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    //  STATE
+    // ============================================================
+    const API = '';
+    let adminKey = sessionStorage.getItem('adminKey') || '';
+    let allProductos = [];
+    let allPedidos = [];
+    let deleteTargetId = null;
+
+    // ============================================================
+    //  UTILS
+    // ============================================================
+    function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function fmt(n) { return Number(n).toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }); }
+    function fmtDate(d) { return new Date(d).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+
+    async function apiFetch(url, opts = {}) {
+      const headers = { ...opts.headers, 'X-Admin-Key': adminKey, 'Content-Type': 'application/json' };
+      try {
+        const res = await fetch(API + url, { ...opts, headers });
+        if (res.status === 401) { doLogout(); return null; }
+        return res.json();
+      } catch (err) {
+        console.error('API Error:', err);
+        return null;
+      }
+    }
+
+    // ============================================================
+    //  AUTH
+    // ============================================================
+    function doLogin() {
+      const pass = document.getElementById('loginPass').value.trim();
+      if (!pass) return;
+      adminKey = pass;
+      sessionStorage.setItem('adminKey', pass);
+      // Try loading stats to validate key
+      apiFetch('/api/admin/stats').then(data => {
+        if (data === null) {
+          document.getElementById('loginError').classList.remove('hidden');
+          adminKey = '';
+          sessionStorage.removeItem('adminKey');
+          return;
+        }
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        showTab('dashboard');
+      });
+    }
+
+    function doLogout() {
+      adminKey = '';
+      sessionStorage.removeItem('adminKey');
+      document.getElementById('adminPanel').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('loginPass').value = '';
+      document.getElementById('loginError').classList.add('hidden');
+    }
+
+    // Auto-login if key exists
+    if (adminKey) {
+      apiFetch('/api/admin/stats').then(data => {
+        if (data !== null) {
+          document.getElementById('loginScreen').classList.add('hidden');
+          document.getElementById('adminPanel').classList.remove('hidden');
+          showTab('dashboard');
+        } else {
+          adminKey = '';
+          sessionStorage.removeItem('adminKey');
+        }
+      });
+    }
+
+    // ============================================================
+    //  SIDEBAR
+    // ============================================================
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebarOverlay').classList.toggle('open');
+    }
+
+    // ============================================================
+    //  TABS
+    // ============================================================
+    const tabs = ['dashboard', 'productos', 'pedidos'];
+    const tabTitles = { dashboard: 'Dashboard', productos: 'Productos', pedidos: 'Pedidos' };
+
+    function showTab(tab) {
+      // Update sidebar
+      tabs.forEach(t => {
+        const nav = document.getElementById('nav' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (t === tab) {
+          nav.classList.add('active');
+          nav.classList.remove('text-gray-400');
+        } else {
+          nav.classList.remove('active');
+          nav.classList.add('text-gray-400');
+        }
+      });
+
+      // Update sections
+      tabs.forEach(t => {
+        const sec = document.getElementById('sec' + t.charAt(0).toUpperCase() + t.slice(1));
+        sec.classList.toggle('hidden', t !== tab);
+      });
+
+      // Update title
+      document.getElementById('pageTitle').textContent = tabTitles[tab];
+
+      // Close mobile sidebar
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('open');
+
+      // Load data
+      if (tab === 'dashboard') loadDashboard();
+      if (tab === 'productos') loadProductos();
+      if (tab === 'pedidos') loadPedidos();
+    }
+
+    // ============================================================
+    //  DASHBOARD
+    // ============================================================
+    async function loadDashboard() {
+      const [stats, pedidos] = await Promise.all([
+        apiFetch('/api/admin/stats'),
+        apiFetch('/api/admin/pedidos')
+      ]);
+
+      if (stats) {
+        document.getElementById('statProductos').textContent = stats.totalProductos ?? '--';
+        document.getElementById('statPedidosHoy').textContent = stats.pedidosHoy ?? '--';
+        document.getElementById('statIngresos').textContent = fmt(stats.ingresosMes ?? 0);
+        document.getElementById('statStockBajo').textContent = stats.stockBajo ?? '--';
+      }
+
+      // Render recent orders (last 5)
+      const container = document.getElementById('recentOrdersList');
+      if (!pedidos || !pedidos.length) {
+        container.innerHTML = '<div class="px-5 py-8 text-center text-gray-500 text-sm">No hay pedidos recientes.</div>';
+        return;
+      }
+
+      const recent = pedidos.slice(0, 5);
+      container.innerHTML = recent.map(p => {
+        const items = Array.isArray(p.items) ? p.items : [];
+        const itemCount = items.reduce((sum, i) => sum + (i.cantidad || i.qty || 1), 0);
+        return `
+          <div class="px-5 py-3.5 flex items-center justify-between table-row">
+            <div class="flex items-center gap-4 min-w-0">
+              <span class="text-xs font-mono text-gray-500">#${p.id}</span>
+              <div class="min-w-0">
+                <p class="text-sm font-medium truncate">${p.cliente_nombre ? esc(p.cliente_nombre) : 'Sin nombre'}</p>
+                <p class="text-xs text-gray-500">${itemCount} item${itemCount !== 1 ? 's' : ''} &middot; ${fmtDate(p.fecha)}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+              <span class="badge badge-${p.estado || 'pendiente'}">${p.estado || 'pendiente'}</span>
+              <span class="text-sm font-semibold">${fmt(p.total)}</span>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ============================================================
+    //  PRODUCTS
+    // ============================================================
+    async function loadProductos() {
+      const data = await apiFetch('/api/admin/productos');
+      if (!data) return;
+      allProductos = data;
+      document.getElementById('productCount').textContent = allProductos.length;
+      renderProductos(allProductos);
+    }
+
+    function filterProducts() {
+      const q = document.getElementById('searchProducts').value.toLowerCase().trim();
+      const filtered = q
+        ? allProductos.filter(p =>
+            (p.nombre || '').toLowerCase().includes(q) ||
+            (p.marca || '').toLowerCase().includes(q) ||
+            (p.categoria || '').toLowerCase().includes(q))
+        : allProductos;
+      renderProductos(filtered);
+    }
+
+    function renderProductos(list) {
+      const tbody = document.getElementById('productosTableBody');
+      const noProducts = document.getElementById('noProducts');
+
+      if (!list.length) {
+        tbody.innerHTML = '';
+        noProducts.classList.remove('hidden');
+        return;
+      }
+
+      noProducts.classList.add('hidden');
+      tbody.innerHTML = list.map(p => {
+        const stockClass = (p.stock ?? 0) < 5 ? 'text-orange-400' : 'text-gray-300';
+        const imgThumb = p.imagen_url
+          ? `<img src="${esc(p.imagen_url)}" class="w-9 h-9 rounded-lg object-cover bg-surface-2 flex-shrink-0" onerror="this.style.display='none'">`
+          : `<div class="w-9 h-9 rounded-lg bg-surface-2 flex items-center justify-center flex-shrink-0"><svg class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>`;
+
+        return `
+          <tr class="table-row">
+            <td class="px-5 py-3.5">
+              <div class="flex items-center gap-3">
+                ${imgThumb}
+                <div class="min-w-0">
+                  <p class="font-medium text-sm truncate max-w-[200px]">${esc(p.nombre)}</p>
+                  <p class="text-xs text-gray-500 md:hidden">${esc(p.marca || '')}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3.5 text-gray-400 text-sm hidden md:table-cell">${esc(p.marca || '-')}</td>
+            <td class="px-5 py-3.5 text-right text-sm font-medium">${fmt(p.precio)}</td>
+            <td class="px-5 py-3.5 text-right text-sm ${stockClass} font-medium">${p.stock ?? 0}</td>
+            <td class="px-5 py-3.5 text-center">
+              ${p.activo !== false
+                ? '<span class="badge" style="background:rgba(16,185,129,0.12);color:#34d399;">Activo</span>'
+                : '<span class="badge" style="background:rgba(239,68,68,0.12);color:#f87171;">Inactivo</span>'}
+            </td>
+            <td class="px-5 py-3.5 text-right">
+              <div class="flex items-center justify-end gap-1">
+                <button onclick="openEditProductModal(${p.id})" class="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors" title="Editar">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </button>
+                ${p.activo !== false
+                  ? `<button onclick="confirmDeactivate(${p.id})" class="p-2 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-400 transition-colors" title="Desactivar">
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                    </button>`
+                  : `<button onclick="toggleProductActivo(${p.id}, true)" class="p-2 rounded-lg hover:bg-brand-500/10 text-gray-400 hover:text-brand-500 transition-colors" title="Activar">
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </button>`
+                }
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+    }
+
+    // ============================================================
+    //  PRODUCT MODAL
+    // ============================================================
+    function openNewProductModal() {
+      document.getElementById('productModalTitle').textContent = 'Nuevo Producto';
+      document.getElementById('pf_id').value = '';
+      document.getElementById('pf_nombre').value = '';
+      document.getElementById('pf_marca').value = '';
+      document.getElementById('pf_categoria').value = '';
+      document.getElementById('pf_precio').value = '';
+      document.getElementById('pf_precioAnterior').value = '';
+      document.getElementById('pf_stock').value = '0';
+      document.getElementById('pf_destacado').checked = false;
+      document.getElementById('pf_nuevo').checked = false;
+      document.getElementById('pf_specs').value = '';
+      document.getElementById('pf_imagen').value = '';
+      showModal('productModal');
+    }
+
+    function openEditProductModal(id) {
+      const p = allProductos.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('productModalTitle').textContent = 'Editar Producto';
+      document.getElementById('pf_id').value = p.id;
+      document.getElementById('pf_nombre').value = p.nombre;
+      document.getElementById('pf_marca').value = p.marca || '';
+      document.getElementById('pf_categoria').value = p.categoria || '';
+      document.getElementById('pf_precio').value = p.precio;
+      document.getElementById('pf_precioAnterior').value = p.precioAnterior || '';
+      document.getElementById('pf_stock').value = p.stock;
+      document.getElementById('pf_destacado').checked = !!p.destacado;
+      document.getElementById('pf_nuevo').checked = !!p.nuevo;
+      document.getElementById('pf_specs').value = Array.isArray(p.specs) ? p.specs.join(', ') : '';
+      document.getElementById('pf_imagen').value = p.imagen_url || '';
+      showModal('productModal');
+    }
+
+    function closeProductModal() { hideModal('productModal'); }
+
+    async function saveProduct(e) {
+      e.preventDefault();
+      const id = document.getElementById('pf_id').value;
+      const specsRaw = document.getElementById('pf_specs').value;
+      const body = {
+        nombre: document.getElementById('pf_nombre').value.trim(),
+        marca: document.getElementById('pf_marca').value.trim(),
+        categoria: document.getElementById('pf_categoria').value.trim(),
+        precio: parseInt(document.getElementById('pf_precio').value) || 0,
+        precioAnterior: parseInt(document.getElementById('pf_precioAnterior').value) || null,
+        stock: parseInt(document.getElementById('pf_stock').value) || 0,
+        destacado: document.getElementById('pf_destacado').checked,
+        nuevo: document.getElementById('pf_nuevo').checked,
+        specs: specsRaw ? specsRaw.split(',').map(s => s.trim()).filter(Boolean) : [],
+        imagen_url: document.getElementById('pf_imagen').value.trim() || null,
+      };
+
+      if (id) {
+        await apiFetch('/api/admin/productos/' + id, { method: 'PUT', body: JSON.stringify(body) });
+      } else {
+        await apiFetch('/api/admin/productos', { method: 'POST', body: JSON.stringify(body) });
+      }
+
+      closeProductModal();
+      loadProductos();
+    }
+
+    // ============================================================
+    //  DELETE CONFIRMATION
+    // ============================================================
+    function confirmDeactivate(id) {
+      deleteTargetId = id;
+      document.getElementById('confirmDeleteBtn').onclick = () => {
+        toggleProductActivo(deleteTargetId, false);
+        closeDeleteModal();
+      };
+      showModal('deleteModal');
+    }
+
+    function closeDeleteModal() { hideModal('deleteModal'); }
+
+    async function toggleProductActivo(id, activo) {
+      if (activo) {
+        await apiFetch('/api/admin/productos/' + id, { method: 'PUT', body: JSON.stringify({ activo: true }) });
+      } else {
+        await apiFetch('/api/admin/productos/' + id, { method: 'DELETE' });
+      }
+      loadProductos();
+    }
+
+    // ============================================================
+    //  MODAL HELPERS
+    // ============================================================
+    function showModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    // Close modals on overlay click
+    ['productModal', 'deleteModal'].forEach(id => {
+      document.getElementById(id).addEventListener('click', function(e) {
+        if (e.target === this) hideModal(id);
+      });
+    });
+
+    // Close modals on Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        ['productModal', 'deleteModal'].forEach(hideModal);
+      }
+    });
+
+    // ============================================================
+    //  ORDERS
+    // ============================================================
+    const ESTADOS = ['pendiente', 'confirmado', 'enviado', 'entregado', 'cancelado'];
+
+    async function loadPedidos() {
+      const data = await apiFetch('/api/admin/pedidos');
+      if (!data) return;
+      allPedidos = data;
+      document.getElementById('orderCount').textContent = allPedidos.length;
+      filterPedidos();
+    }
+
+    function filterPedidos() {
+      const filter = document.getElementById('filterEstado').value;
+      const filtered = filter ? allPedidos.filter(p => p.estado === filter) : allPedidos;
+      renderPedidos(filtered);
+    }
+
+    function renderPedidos(list) {
+      const container = document.getElementById('pedidosList');
+      const noPedidos = document.getElementById('noPedidos');
+
+      if (!list.length) {
+        container.innerHTML = '';
+        noPedidos.classList.remove('hidden');
+        return;
+      }
+
+      noPedidos.classList.add('hidden');
+
+      container.innerHTML = list.map(p => {
+        const items = Array.isArray(p.items) ? p.items : [];
+        const estado = p.estado || 'pendiente';
+
+        const itemsHtml = items.map(i =>
+          `<div class="flex items-center justify-between text-sm py-1.5">
+            <span class="text-gray-300">${esc(i.nombre || i.name || 'Producto')}</span>
+            <span class="text-gray-500">x${i.cantidad || i.qty || 1} &middot; ${fmt(i.precio || i.price || 0)}</span>
+          </div>`
+        ).join('');
+
+        const estadoOptions = ESTADOS.map(e =>
+          `<option value="${e}" ${estado === e ? 'selected' : ''}>${e.charAt(0).toUpperCase() + e.slice(1)}</option>`
+        ).join('');
+
+        return `
+          <div class="glass rounded-2xl overflow-hidden">
+            <!-- Order header -->
+            <div class="px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.04]">
+              <div class="flex items-center gap-3 flex-wrap">
+                <span class="font-mono text-sm font-semibold text-gray-300">#${p.id}</span>
+                <span class="badge badge-${estado}">${estado}</span>
+                <span class="text-xs text-gray-500">${fmtDate(p.fecha)}</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <select onchange="updatePedidoEstado(${p.id}, this.value)" class="text-xs px-3 py-1.5 rounded-lg">
+                  ${estadoOptions}
+                </select>
+                <span class="text-lg font-bold text-brand-500">${fmt(p.total)}</span>
+              </div>
+            </div>
+
+            <!-- Order body -->
+            <div class="px-5 py-3">
+              <!-- Client info -->
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-full bg-surface-2 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                </div>
+                <div>
+                  <p class="text-sm font-medium">${p.cliente_nombre ? esc(p.cliente_nombre) : 'Cliente anonimo'}</p>
+                  <p class="text-xs text-gray-500">${[p.cliente_tel, p.cliente_email].filter(Boolean).map(esc).join(' &middot; ') || 'Sin datos de contacto'}</p>
+                </div>
+              </div>
+
+              <!-- Items -->
+              ${items.length ? `<div class="border-t border-white/[0.04] pt-2 divide-y divide-white/[0.03]">${itemsHtml}</div>` : '<p class="text-xs text-gray-500">Sin items detallados</p>'}
+
+              ${p.notas ? `<div class="mt-3 px-3 py-2 rounded-lg bg-surface-2 text-xs text-gray-400"><strong class="text-gray-300">Nota:</strong> ${esc(p.notas)}</div>` : ''}
+
+              ${p.direccion ? `<div class="mt-2 flex items-start gap-1.5 text-xs text-gray-500"><svg class="w-3.5 h-3.5 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>${esc(p.direccion)}</div>` : ''}
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function updatePedidoEstado(id, estado) {
+      await apiFetch('/api/admin/pedidos/' + id, { method: 'PUT', body: JSON.stringify({ estado }) });
+      // Update local state
+      const pedido = allPedidos.find(p => p.id === id);
+      if (pedido) pedido.estado = estado;
+    }
+  </script>
+</body>
+</html>

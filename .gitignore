@@ -1,0 +1,5 @@
+node_modules/
+compralo.db
+compralo.db-shm
+compralo.db-wal
+.env

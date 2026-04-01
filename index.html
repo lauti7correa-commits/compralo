@@ -6,9 +6,20 @@
   <title>Compralo - Los mejores celulares al mejor precio</title>
   <meta name="description" content="Encontra los ultimos modelos de Samsung, Apple, Motorola y Xiaomi con financiacion, envio gratis y garantia oficial." />
   <meta name="keywords" content="celulares, smartphones, samsung, apple, iphone, motorola, xiaomi, argentina, comprar celular" />
+  <link rel="canonical" href="https://compralo.store" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Compralo - Los mejores celulares al mejor precio" />
+  <meta property="og:description" content="Encontra los ultimos modelos de Samsung, Apple, Motorola y Xiaomi con financiacion, envio gratis y garantia oficial." />
+  <meta property="og:url" content="https://compralo.store" />
+  <meta property="og:site_name" content="Compralo" />
+  <meta property="og:locale" content="es_AR" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Compralo - Los mejores celulares al mejor precio" />
+  <meta name="twitter:description" content="Samsung, Apple, Motorola y Xiaomi con financiacion y envio gratis." />
+  <meta name="theme-color" content="#10b981" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -30,62 +41,166 @@
     * { scrollbar-width: thin; scrollbar-color: #1a1a1a #0a0a0a; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    .float { animation: float 3s ease-in-out infinite; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .fade-up { animation: fadeUp 0.6s ease-out forwards; }
-    .fade-up-delay-1 { animation-delay: 0.1s; opacity: 0; }
-    .fade-up-delay-2 { animation-delay: 0.2s; opacity: 0; }
-    .fade-up-delay-3 { animation-delay: 0.3s; opacity: 0; }
-    .fade-up-delay-4 { animation-delay: 0.4s; opacity: 0; }
-    .card-product { transition: all 0.3s ease; }
-    .card-product:hover { transform: translateY(-4px); border-color: rgba(16,185,129,0.3); }
-    .card-product:hover .card-img { transform: scale(1.05); }
-    .card-img { transition: transform 0.4s ease; }
-    .btn-cart { transition: all 0.3s ease; }
-    .btn-cart:hover { background: #10b981; color: #000; border-color: #10b981; }
-    .glass { background: rgba(10,10,10,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-    .glow { box-shadow: 0 0 60px rgba(16,185,129,0.15); }
+
+    /* Animations */
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .float { animation: float 4s ease-in-out infinite; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-up { animation: fadeUp 0.7s ease-out forwards; }
+    .fade-up-delay-1 { animation-delay: 0.15s; opacity: 0; }
+    .fade-up-delay-2 { animation-delay: 0.3s; opacity: 0; }
+    .fade-up-delay-3 { animation-delay: 0.45s; opacity: 0; }
+    .fade-up-delay-4 { animation-delay: 0.6s; opacity: 0; }
+
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+      border-radius: 1rem;
+    }
+
+    @keyframes pulse-glow { 0%,100% { box-shadow: 0 0 20px rgba(16,185,129,0.2); } 50% { box-shadow: 0 0 40px rgba(16,185,129,0.4); } }
+    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+    @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes slideOutRight { from { transform: translateX(0); } to { transform: translateX(100%); } }
+
+    @keyframes heroGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .hero-gradient {
+      background: linear-gradient(-45deg, #0a0a0a, #064e3b, #0a0a0a, #022c22);
+      background-size: 400% 400%;
+      animation: heroGradient 12s ease infinite;
+    }
+
+    /* Glass morphism */
+    .glass { background: rgba(10,10,10,0.7); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); }
+    .glass-card {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(16,185,129,0.25);
+      transform: translateY(-6px);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 40px rgba(16,185,129,0.08);
+    }
+    .glass-card:hover .card-img { transform: scale(1.08) rotate(1deg); }
+    .card-img { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    /* Buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.5s ease;
+    }
+    .btn-primary:hover::before { left: 100%; }
+    .btn-primary:hover { box-shadow: 0 8px 30px rgba(16,185,129,0.3); transform: translateY(-1px); }
+
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-whatsapp:hover { box-shadow: 0 8px 30px rgba(37,211,102,0.3); transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: rgba(16,185,129,0.08);
+      border: 1px solid rgba(16,185,129,0.2);
+      transition: all 0.3s ease;
+    }
+    .btn-ghost:hover { background: #10b981; color: #000; border-color: #10b981; }
+
+    /* Scroll-triggered fade */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Range slider */
+    input[type="range"] { -webkit-appearance: none; background: transparent; }
+    input[type="range"]::-webkit-slider-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: #10b981; border-radius: 50%; margin-top: -7px; cursor: pointer; box-shadow: 0 0 10px rgba(16,185,129,0.4); }
+    input[type="range"]::-moz-range-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; border: none; }
+    input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; background: #10b981; border-radius: 50%; border: none; cursor: pointer; box-shadow: 0 0 10px rgba(16,185,129,0.4); }
+
+    /* Carousel */
+    .carousel-container { scroll-snap-type: x mandatory; }
+    .carousel-container > * { scroll-snap-align: start; }
+
+    /* Glow effects */
+    .glow { box-shadow: 0 0 80px rgba(16,185,129,0.12); }
+    .glow-sm { box-shadow: 0 0 30px rgba(16,185,129,0.1); }
+
+    /* Toast */
+    @keyframes toastIn { from { transform: translateY(100px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+    @keyframes toastOut { from { transform: translateY(0) scale(1); opacity: 1; } to { transform: translateY(100px) scale(0.9); opacity: 0; } }
+    .toast-in { animation: toastIn 0.4s ease-out forwards; }
+    .toast-out { animation: toastOut 0.3s ease-in forwards; }
+
+    /* Noise texture overlay */
+    .noise::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+    }
   </style>
 </head>
-<body class="bg-[#0a0a0a] text-gray-100 font-sans antialiased">
+<body class="bg-[#050505] text-gray-100 font-sans antialiased">
 
   <!-- NAVBAR -->
-  <nav id="navbar" class="fixed top-0 w-full z-50 glass border-b border-white/5 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between h-16">
+  <nav id="navbar" class="fixed top-0 w-full z-50 glass border-b border-white/[0.04] transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-[72px]">
         <!-- Logo -->
-        <a href="#" class="flex items-center gap-2 group">
-          <div class="w-9 h-9 bg-brand-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+        <a href="#" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-brand-500/25 transition-all duration-300">
             <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
           </div>
-          <span class="text-xl font-bold tracking-tight">Compralo</span>
+          <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">Compralo</span>
         </a>
 
         <!-- Desktop Nav -->
-        <div class="hidden md:flex items-center gap-8">
-          <a href="#inicio" class="text-sm text-zinc-400 hover:text-brand-400 transition-colors">Inicio</a>
-          <a href="#productos" class="text-sm text-zinc-400 hover:text-brand-400 transition-colors">Productos</a>
-          <a href="#ofertas" class="text-sm text-zinc-400 hover:text-brand-400 transition-colors">Ofertas</a>
-          <a href="#nosotros" class="text-sm text-zinc-400 hover:text-brand-400 transition-colors">Nosotros</a>
-          <a href="#contacto" class="text-sm text-zinc-400 hover:text-brand-400 transition-colors">Contacto</a>
+        <div class="hidden lg:flex items-center gap-1">
+          <a href="#inicio" class="px-4 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.04] rounded-lg transition-all duration-200">Inicio</a>
+          <a href="#destacados" class="px-4 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.04] rounded-lg transition-all duration-200">Destacados</a>
+          <a href="#productos" class="px-4 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.04] rounded-lg transition-all duration-200">Productos</a>
+          <a href="#ofertas" class="px-4 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.04] rounded-lg transition-all duration-200">Ofertas</a>
+          <a href="#nosotros" class="px-4 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.04] rounded-lg transition-all duration-200">Nosotros</a>
+          <a href="#contacto" class="px-4 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.04] rounded-lg transition-all duration-200">Contacto</a>
         </div>
 
-        <div class="flex items-center gap-3">
-          <!-- Search -->
-          <div class="hidden md:flex items-center bg-white/5 rounded-full px-4 py-2 border border-white/10 focus-within:border-brand-500/50 transition-colors">
-            <svg class="w-4 h-4 text-zinc-500 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-            <input id="searchDesktop" type="text" placeholder="Buscar celulares..." class="bg-transparent text-sm outline-none w-44 placeholder:text-zinc-600" oninput="filterProducts()" />
+        <div class="flex items-center gap-2">
+          <!-- Search desktop -->
+          <div class="hidden md:flex items-center bg-white/[0.04] rounded-xl px-4 py-2.5 border border-white/[0.06] focus-within:border-brand-500/40 focus-within:bg-white/[0.06] transition-all duration-300">
+            <svg class="w-4 h-4 text-zinc-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+            <input id="searchDesktop" type="text" placeholder="Buscar celulares..." class="bg-transparent text-sm outline-none w-48 placeholder:text-zinc-600" oninput="filterProducts()" />
           </div>
 
           <!-- Cart Button -->
-          <button onclick="toggleCart()" class="relative p-2.5 hover:bg-white/5 rounded-full transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-5.98.572l-.003.048a.75.75 0 00.738.867h.333m3.912-1.487h6.088m0 0a3 3 0 105.98.572l.003.048a.75.75 0 01-.738.867h-6.245m0 0L7.5 14.25m0 0l-1.394-5.228M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
-            <span id="cartBadge" class="hidden absolute -top-0.5 -right-0.5 bg-brand-500 text-[10px] font-bold text-black rounded-full w-5 h-5 flex items-center justify-center">0</span>
+          <button onclick="toggleCart()" class="relative p-2.5 hover:bg-white/[0.06] rounded-xl transition-all duration-200 group">
+            <svg class="w-5 h-5 group-hover:text-brand-400 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+            <span id="cartBadge" class="hidden absolute -top-0.5 -right-0.5 bg-gradient-to-r from-brand-400 to-brand-500 text-[10px] font-bold text-black rounded-full w-5 h-5 flex items-center justify-center shadow-lg shadow-brand-500/30 transition-transform">0</span>
           </button>
 
           <!-- Mobile Menu -->
-          <button onclick="toggleMobile()" class="md:hidden p-2 hover:bg-white/5 rounded-full">
+          <button onclick="toggleMobile()" class="lg:hidden p-2.5 hover:bg-white/[0.06] rounded-xl transition-all">
             <svg id="menuIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
             <svg id="closeIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
@@ -93,206 +208,367 @@
       </div>
 
       <!-- Mobile Dropdown -->
-      <div id="mobileMenu" class="md:hidden hidden border-t border-white/5 pb-4">
+      <div id="mobileMenu" class="lg:hidden hidden border-t border-white/[0.04] pb-4">
         <div class="pt-3 space-y-1">
-          <div class="flex items-center bg-white/5 rounded-full px-4 py-2 border border-white/10 mb-3">
+          <div class="flex items-center bg-white/[0.04] rounded-xl px-4 py-2.5 border border-white/[0.06] mb-3">
             <svg class="w-4 h-4 text-zinc-500 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
             <input id="searchMobile" type="text" placeholder="Buscar celulares..." class="bg-transparent text-sm outline-none w-full placeholder:text-zinc-600" oninput="filterProducts()" />
           </div>
-          <a href="#inicio" class="block px-3 py-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors" onclick="toggleMobile()">Inicio</a>
-          <a href="#productos" class="block px-3 py-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors" onclick="toggleMobile()">Productos</a>
-          <a href="#ofertas" class="block px-3 py-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors" onclick="toggleMobile()">Ofertas</a>
-          <a href="#nosotros" class="block px-3 py-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors" onclick="toggleMobile()">Nosotros</a>
-          <a href="#contacto" class="block px-3 py-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors" onclick="toggleMobile()">Contacto</a>
+          <a href="#inicio" class="block px-4 py-2.5 text-zinc-400 hover:text-white rounded-xl hover:bg-white/[0.04] transition-all" onclick="toggleMobile()">Inicio</a>
+          <a href="#destacados" class="block px-4 py-2.5 text-zinc-400 hover:text-white rounded-xl hover:bg-white/[0.04] transition-all" onclick="toggleMobile()">Destacados</a>
+          <a href="#productos" class="block px-4 py-2.5 text-zinc-400 hover:text-white rounded-xl hover:bg-white/[0.04] transition-all" onclick="toggleMobile()">Productos</a>
+          <a href="#ofertas" class="block px-4 py-2.5 text-zinc-400 hover:text-white rounded-xl hover:bg-white/[0.04] transition-all" onclick="toggleMobile()">Ofertas</a>
+          <a href="#nosotros" class="block px-4 py-2.5 text-zinc-400 hover:text-white rounded-xl hover:bg-white/[0.04] transition-all" onclick="toggleMobile()">Nosotros</a>
+          <a href="#contacto" class="block px-4 py-2.5 text-zinc-400 hover:text-white rounded-xl hover:bg-white/[0.04] transition-all" onclick="toggleMobile()">Contacto</a>
         </div>
       </div>
     </div>
   </nav>
 
   <!-- HERO -->
-  <section id="inicio" class="relative pt-32 pb-24 px-4 overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-brand-500/[0.07] via-transparent to-transparent"></div>
-    <div class="absolute top-20 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px]"></div>
+  <section id="inicio" class="relative min-h-[100vh] flex items-center overflow-hidden hero-gradient noise">
+    <!-- Ambient light effects -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-500/[0.07] rounded-full blur-[150px]"></div>
+    <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-brand-600/[0.05] rounded-full blur-[120px]"></div>
+    <div class="absolute top-1/3 left-0 w-[300px] h-[300px] bg-emerald-500/[0.04] rounded-full blur-[100px]"></div>
 
-    <div class="max-w-7xl mx-auto relative">
-      <div class="text-center max-w-3xl mx-auto">
-        <div class="fade-up">
-          <span class="inline-flex items-center gap-1.5 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-full px-4 py-1.5 text-sm font-medium mb-6">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
-            Envio gratis a todo el pais
-          </span>
+    <!-- Grid pattern overlay -->
+    <div class="absolute inset-0 opacity-[0.02]" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 60px 60px;"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-24 pb-16 w-full">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+        <!-- Text side -->
+        <div class="text-center lg:text-left">
+          <div class="fade-up">
+            <span class="inline-flex items-center gap-2 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-full px-5 py-2 text-sm font-medium mb-8 backdrop-blur-sm">
+              <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+              Envio gratis a todo el pais
+            </span>
+          </div>
+
+          <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1.05] mb-6 fade-up fade-up-delay-1">
+            Tu proximo<br />
+            <span class="bg-gradient-to-r from-brand-300 via-brand-400 to-emerald-300 bg-clip-text text-transparent">celular</span><br />
+            esta aca
+          </h1>
+
+          <p class="text-lg md:text-xl text-zinc-400 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed fade-up fade-up-delay-2">
+            Los ultimos modelos de Samsung, Apple, Motorola y Xiaomi. Financiacion en cuotas, garantia oficial y envio a todo el pais.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start fade-up fade-up-delay-3">
+            <a href="#productos" class="btn-primary inline-flex items-center justify-center gap-2.5 text-black font-bold h-14 px-10 rounded-2xl text-base">
+              Ver Catalogo
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+            </a>
+            <a href="https://wa.me/5491112345678?text=Hola!%20Quiero%20info%20sobre%20celulares" target="_blank" class="btn-whatsapp inline-flex items-center justify-center gap-2.5 text-white font-bold h-14 px-10 rounded-2xl text-base">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Consultar
+            </a>
+          </div>
         </div>
 
-        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6 fade-up fade-up-delay-1">
-          Los mejores<br />
-          <span class="bg-gradient-to-r from-brand-400 to-emerald-300 bg-clip-text text-transparent">celulares</span><br />
-          al mejor precio
-        </h1>
-
-        <p class="text-lg text-zinc-400 mb-8 max-w-xl mx-auto fade-up fade-up-delay-2">
-          Encontra los ultimos modelos de Samsung, Apple, Motorola y Xiaomi con financiacion y envio a todo el pais.
-        </p>
-
-        <div class="flex flex-col sm:flex-row gap-3 justify-center fade-up fade-up-delay-3">
-          <a href="#productos" class="inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 text-black font-bold h-12 px-8 rounded-full text-base transition-colors">
-            Ver Catalogo
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
-          </a>
-          <a href="#ofertas" class="inline-flex items-center justify-center gap-2 border border-white/10 hover:bg-white/5 font-medium h-12 px-8 rounded-full text-base transition-colors">
-            Ofertas del dia
-          </a>
+        <!-- Hero phone visual -->
+        <div class="hidden lg:flex items-center justify-center fade-up fade-up-delay-4">
+          <div class="relative">
+            <!-- Glow behind phone -->
+            <div class="absolute inset-0 bg-brand-500/20 rounded-full blur-[80px] scale-75"></div>
+            <!-- Phone mockup -->
+            <div class="relative float">
+              <div class="w-72 h-[580px] bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-[3rem] border-2 border-zinc-700/50 shadow-2xl shadow-black/50 flex items-center justify-center overflow-hidden">
+                <div class="w-[calc(100%-16px)] h-[calc(100%-16px)] rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-brand-950 via-[#0a0a0a] to-brand-950 flex flex-col items-center justify-center p-8">
+                  <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center mb-6 shadow-lg shadow-brand-500/30">
+                    <svg class="w-10 h-10 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+                  </div>
+                  <p class="text-2xl font-black text-white tracking-tight">Compralo</p>
+                  <p class="text-xs text-zinc-500 mt-2">Los mejores celulares</p>
+                  <div class="mt-8 w-full space-y-3">
+                    <div class="h-3 bg-white/[0.06] rounded-full w-full"></div>
+                    <div class="h-3 bg-white/[0.04] rounded-full w-3/4"></div>
+                    <div class="h-3 bg-white/[0.03] rounded-full w-1/2"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Notch -->
+              <div class="absolute top-6 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-full"></div>
+            </div>
+            <!-- Floating badges -->
+            <div class="absolute -left-16 top-20 bg-white/[0.06] backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3 shadow-xl float" style="animation-delay: 0.5s;">
+              <p class="text-xs text-zinc-400">Envio gratis</p>
+              <p class="text-sm font-bold text-brand-400">24-72hs</p>
+            </div>
+            <div class="absolute -right-12 bottom-32 bg-white/[0.06] backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3 shadow-xl float" style="animation-delay: 1s;">
+              <p class="text-xs text-zinc-400">Hasta</p>
+              <p class="text-sm font-bold text-brand-400">12 cuotas s/i</p>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Trust badges -->
-      <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto fade-up fade-up-delay-4">
-        <div class="flex flex-col items-center text-center p-4 rounded-2xl bg-white/[0.03] border border-white/5">
-          <svg class="w-6 h-6 text-brand-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
-          <p class="text-sm font-medium">Envio gratis</p>
-          <p class="text-xs text-zinc-500">A todo el pais</p>
+      <div class="mt-16 lg:mt-24 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto fade-up fade-up-delay-4">
+        <div class="flex flex-col items-center text-center p-5 rounded-2xl bg-white/[0.03] border border-white/[0.05] hover:border-brand-500/20 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+          </div>
+          <p class="text-sm font-semibold">Envio gratis</p>
+          <p class="text-xs text-zinc-500 mt-0.5">A todo el pais</p>
         </div>
-        <div class="flex flex-col items-center text-center p-4 rounded-2xl bg-white/[0.03] border border-white/5">
-          <svg class="w-6 h-6 text-brand-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
-          <p class="text-sm font-medium">Garantia oficial</p>
-          <p class="text-xs text-zinc-500">12 meses</p>
+        <div class="flex flex-col items-center text-center p-5 rounded-2xl bg-white/[0.03] border border-white/[0.05] hover:border-brand-500/20 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+          </div>
+          <p class="text-sm font-semibold">Garantia oficial</p>
+          <p class="text-xs text-zinc-500 mt-0.5">12 meses</p>
         </div>
-        <div class="flex flex-col items-center text-center p-4 rounded-2xl bg-white/[0.03] border border-white/5">
-          <svg class="w-6 h-6 text-brand-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>
-          <p class="text-sm font-medium">Hasta 12 cuotas</p>
-          <p class="text-xs text-zinc-500">Sin interes</p>
+        <div class="flex flex-col items-center text-center p-5 rounded-2xl bg-white/[0.03] border border-white/[0.05] hover:border-brand-500/20 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>
+          </div>
+          <p class="text-sm font-semibold">Hasta 12 cuotas</p>
+          <p class="text-xs text-zinc-500 mt-0.5">Sin interes</p>
         </div>
-        <div class="flex flex-col items-center text-center p-4 rounded-2xl bg-white/[0.03] border border-white/5">
-          <svg class="w-6 h-6 text-brand-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-          <p class="text-sm font-medium">4.9 estrellas</p>
-          <p class="text-xs text-zinc-500">+500 ventas</p>
+        <div class="flex flex-col items-center text-center p-5 rounded-2xl bg-white/[0.03] border border-white/[0.05] hover:border-brand-500/20 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+          </div>
+          <p class="text-sm font-semibold">4.9 estrellas</p>
+          <p class="text-xs text-zinc-500 mt-0.5">+500 ventas</p>
         </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+      <span class="text-xs text-zinc-500 tracking-widest uppercase">Scroll</span>
+      <div class="w-6 h-10 rounded-full border-2 border-zinc-600 flex justify-center pt-2">
+        <div class="w-1.5 h-3 bg-zinc-500 rounded-full animate-bounce"></div>
       </div>
     </div>
   </section>
 
-  <!-- OFERTAS / DESTACADOS -->
-  <section id="ofertas" class="py-16 px-4">
+  <!-- BRANDS BAR -->
+  <section class="py-10 px-4 border-b border-white/[0.04] bg-white/[0.01]">
     <div class="max-w-7xl mx-auto">
-      <div class="flex items-center justify-between mb-8">
+      <div class="flex items-center justify-center gap-10 md:gap-20 opacity-25 hover:opacity-40 transition-opacity duration-500 flex-wrap">
+        <span class="text-lg md:text-xl font-black tracking-[0.25em]">SAMSUNG</span>
+        <span class="text-lg md:text-xl font-black tracking-[0.25em]">APPLE</span>
+        <span class="text-lg md:text-xl font-black tracking-[0.25em]">MOTOROLA</span>
+        <span class="text-lg md:text-xl font-black tracking-[0.25em]">XIAOMI</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESTACADOS CAROUSEL -->
+  <section id="destacados" class="py-20 px-4 relative">
+    <div class="absolute top-0 left-0 w-96 h-96 bg-brand-500/[0.03] rounded-full blur-[120px]"></div>
+    <div class="max-w-7xl mx-auto relative">
+      <div class="flex items-end justify-between mb-10 reveal">
         <div>
-          <h2 class="text-2xl md:text-3xl font-bold">Ofertas del dia</h2>
-          <p class="text-zinc-500 mt-1">Los mejores precios del momento</p>
+          <span class="text-brand-400 text-sm font-semibold tracking-wider uppercase">Seleccion premium</span>
+          <h2 class="text-3xl md:text-4xl font-black mt-2">Destacados</h2>
+          <p class="text-zinc-500 mt-2 max-w-md">Los celulares mas elegidos por nuestros clientes</p>
         </div>
-        <a href="#productos" class="hidden sm:flex items-center gap-1 text-brand-400 hover:text-brand-300 text-sm font-medium transition-colors">
-          Ver todos
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
-        </a>
+        <div class="hidden sm:flex gap-2">
+          <button onclick="scrollCarousel(-1)" class="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center hover:bg-white/10 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+          </button>
+          <button onclick="scrollCarousel(1)" class="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center hover:bg-white/10 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+          </button>
+        </div>
       </div>
-      <div id="destacados" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- JS fills this -->
-      </div>
-    </div>
-  </section>
-
-  <!-- MARCAS -->
-  <section class="py-12 px-4 border-y border-white/5">
-    <div class="max-w-7xl mx-auto">
-      <div class="flex items-center justify-center gap-10 md:gap-20 opacity-30 flex-wrap">
-        <span class="text-lg md:text-xl font-bold tracking-[0.2em]">SAMSUNG</span>
-        <span class="text-lg md:text-xl font-bold tracking-[0.2em]">APPLE</span>
-        <span class="text-lg md:text-xl font-bold tracking-[0.2em]">MOTOROLA</span>
-        <span class="text-lg md:text-xl font-bold tracking-[0.2em]">XIAOMI</span>
+      <div id="carouselContainer" class="flex gap-4 overflow-x-auto no-scrollbar carousel-container pb-4 reveal">
+        <!-- JS fills: skeleton first, then real cards -->
       </div>
     </div>
   </section>
 
-  <!-- CATALOGO -->
-  <section id="productos" class="py-16 px-4">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="text-2xl md:text-3xl font-bold mb-8">Todos los Celulares</h2>
-
-      <!-- Filters -->
-      <div id="catFilters" class="flex gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar">
-        <!-- JS fills this -->
+  <!-- STICKY FILTER BAR + CATALOGO -->
+  <section id="productos" class="py-20 px-4 relative">
+    <div class="absolute top-40 right-0 w-96 h-96 bg-brand-500/[0.03] rounded-full blur-[120px]"></div>
+    <div class="max-w-7xl mx-auto relative">
+      <div class="text-center mb-12 reveal">
+        <span class="text-brand-400 text-sm font-semibold tracking-wider uppercase">Nuestro catalogo</span>
+        <h2 class="text-3xl md:text-4xl font-black mt-2">Todos los Celulares</h2>
+        <p class="text-zinc-500 mt-2">Encontra el celular perfecto para vos</p>
       </div>
 
-      <!-- Grid -->
-      <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        <!-- JS fills this -->
+      <!-- Sticky Filter Bar -->
+      <div class="sticky top-16 lg:top-[72px] z-30 py-4 -mx-4 px-4 glass border-b border-white/[0.04] mb-8 reveal">
+        <div class="max-w-7xl mx-auto">
+          <!-- Brand filters -->
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <div id="catFilters" class="flex gap-2 overflow-x-auto no-scrollbar flex-1">
+              <!-- JS fills -->
+            </div>
+          </div>
+          <!-- Search + Price range -->
+          <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+            <div class="flex items-center bg-white/[0.04] rounded-xl px-4 py-2.5 border border-white/[0.06] flex-1 sm:max-w-xs">
+              <svg class="w-4 h-4 text-zinc-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+              <input id="searchFilter" type="text" placeholder="Buscar modelo..." class="bg-transparent text-sm outline-none w-full placeholder:text-zinc-600" oninput="filterProducts()" />
+            </div>
+            <div class="flex items-center gap-3 flex-1 sm:max-w-sm">
+              <span class="text-xs text-zinc-500 whitespace-nowrap">Precio max:</span>
+              <input id="priceRange" type="range" min="0" max="3000000" value="3000000" step="50000" class="flex-1" oninput="filterProducts(); document.getElementById('priceLabel').textContent = fmt(Number(this.value));" />
+              <span id="priceLabel" class="text-xs text-brand-400 font-semibold min-w-[90px] text-right">$3.000.000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skeleton grid (shown while loading) -->
+      <div id="skeletonGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div class="skeleton h-[420px]"></div>
+        <div class="skeleton h-[420px]"></div>
+        <div class="skeleton h-[420px]"></div>
+        <div class="skeleton h-[420px]"></div>
+        <div class="skeleton h-[420px]"></div>
+        <div class="skeleton h-[420px]"></div>
+        <div class="skeleton h-[420px]"></div>
+        <div class="skeleton h-[420px]"></div>
+      </div>
+
+      <!-- Product Grid -->
+      <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 hidden">
+        <!-- JS fills -->
       </div>
 
       <!-- Empty state -->
-      <div id="emptyState" class="hidden text-center py-20 text-zinc-500">
-        <svg class="w-16 h-16 mx-auto mb-4 opacity-20" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
-        <p class="text-lg">No encontramos productos</p>
-        <p class="text-sm mt-1">Proba con otra busqueda o categoria</p>
+      <div id="emptyState" class="hidden text-center py-24 text-zinc-500">
+        <div class="w-20 h-20 rounded-2xl bg-white/[0.03] flex items-center justify-center mx-auto mb-6">
+          <svg class="w-10 h-10 opacity-30" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+        </div>
+        <p class="text-xl font-semibold text-zinc-300">No encontramos productos</p>
+        <p class="text-sm mt-2">Proba con otra busqueda o categoria</p>
+        <button onclick="resetFilters()" class="mt-6 px-6 py-2.5 border border-white/10 rounded-xl text-sm hover:bg-white/5 transition-all">Limpiar filtros</button>
       </div>
     </div>
   </section>
 
-  <!-- POR QUE ELEGIRNOS -->
-  <section id="nosotros" class="py-16 px-4 bg-white/[0.02]">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="text-2xl md:text-3xl font-bold text-center mb-4">Por que elegirnos</h2>
-      <p class="text-zinc-500 text-center mb-12 max-w-xl mx-auto">Mas de 500 clientes satisfechos nos avalan</p>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-center hover:border-brand-500/20 transition-all duration-300">
-          <div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mx-auto mb-4">
-            <svg class="w-7 h-7 text-brand-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+  <!-- OFERTAS -->
+  <section id="ofertas" class="py-20 px-4 bg-gradient-to-b from-red-500/[0.03] via-transparent to-transparent relative">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-red-500/[0.05] rounded-full blur-[120px]"></div>
+    <div class="max-w-7xl mx-auto relative">
+      <div class="text-center mb-12 reveal">
+        <span class="inline-flex items-center gap-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-full px-5 py-2 text-sm font-semibold mb-4">
+          <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+          Ofertas limitadas
+        </span>
+        <h2 class="text-3xl md:text-4xl font-black">Ofertas del Momento</h2>
+        <p class="text-zinc-500 mt-2">Aprovecha estos precios increibles antes de que se agoten</p>
+      </div>
+      <div id="ofertasGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <!-- JS fills -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT US -->
+  <section id="nosotros" class="py-20 px-4 relative">
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-brand-500/[0.03] rounded-full blur-[120px]"></div>
+    <div class="max-w-7xl mx-auto relative">
+      <div class="text-center mb-14 reveal">
+        <span class="text-brand-400 text-sm font-semibold tracking-wider uppercase">Sobre nosotros</span>
+        <h2 class="text-3xl md:text-4xl font-black mt-2">Por que elegirnos</h2>
+        <p class="text-zinc-500 mt-2 max-w-xl mx-auto">Mas de 500 clientes satisfechos nos avalan como una de las tiendas mas confiables del pais</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
+        <div class="glass-card rounded-2xl p-8 text-center group">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+            <svg class="w-8 h-8 text-brand-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
           </div>
-          <h3 class="text-lg font-semibold mb-2">Envio a todo el pais</h3>
-          <p class="text-sm text-zinc-400 leading-relaxed">Recibilo en tu puerta en 24-72hs. Envio gratis en compras mayores a $500.000.</p>
+          <h3 class="text-lg font-bold mb-2">Envio a todo el pais</h3>
+          <p class="text-sm text-zinc-400 leading-relaxed">Recibilo en tu puerta en 24-72hs. Envio gratis en compras mayores a $500.000. Seguimiento en tiempo real.</p>
         </div>
-        <div class="bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-center hover:border-brand-500/20 transition-all duration-300">
-          <div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mx-auto mb-4">
-            <svg class="w-7 h-7 text-brand-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+        <div class="glass-card rounded-2xl p-8 text-center group">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+            <svg class="w-8 h-8 text-brand-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
           </div>
-          <h3 class="text-lg font-semibold mb-2">Garantia oficial</h3>
-          <p class="text-sm text-zinc-400 leading-relaxed">Todos nuestros productos tienen garantia oficial de 12 meses + 6 meses de garantia extendida.</p>
+          <h3 class="text-lg font-bold mb-2">Garantia oficial</h3>
+          <p class="text-sm text-zinc-400 leading-relaxed">Todos nuestros productos tienen garantia oficial de 12 meses + 6 meses de garantia extendida nuestra.</p>
         </div>
-        <div class="bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-center hover:border-brand-500/20 transition-all duration-300">
-          <div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mx-auto mb-4">
-            <svg class="w-7 h-7 text-brand-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>
+        <div class="glass-card rounded-2xl p-8 text-center group">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+            <svg class="w-8 h-8 text-brand-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>
           </div>
-          <h3 class="text-lg font-semibold mb-2">Financiacion</h3>
-          <p class="text-sm text-zinc-400 leading-relaxed">Paga en hasta 12 cuotas sin interes con todas las tarjetas. Tambien aceptamos transferencia y efectivo.</p>
+          <h3 class="text-lg font-bold mb-2">Financiacion flexible</h3>
+          <p class="text-sm text-zinc-400 leading-relaxed">Paga en hasta 12 cuotas sin interes con todas las tarjetas. Aceptamos transferencia, efectivo y crypto.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT / CTA -->
+  <section id="contacto" class="py-20 px-4 relative">
+    <div class="max-w-4xl mx-auto relative">
+      <div class="glass-card rounded-3xl p-10 md:p-16 text-center glow reveal">
+        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#25d366] to-[#128c7e] flex items-center justify-center mx-auto mb-8 pulse-glow">
+          <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-black mb-4">Hablemos por WhatsApp</h2>
+        <p class="text-zinc-400 max-w-lg mx-auto mb-8 leading-relaxed">
+          Tenemos el celular ideal para vos. Escribinos y te asesoramos al instante. Respuesta en menos de 5 minutos.
+        </p>
+        <a href="https://wa.me/5491112345678?text=Hola!%20Quiero%20info%20sobre%20celulares" target="_blank" class="btn-whatsapp inline-flex items-center justify-center gap-3 text-white font-bold h-14 px-10 rounded-2xl text-lg">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Escribinos ahora
+        </a>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 mt-10 text-sm text-zinc-500">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+            Buenos Aires, Argentina
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+            ventas@compralo.com.ar
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+            +54 11 1234-5678
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer id="contacto" class="py-16 px-4 border-t border-white/5">
+  <footer class="py-16 px-4 border-t border-white/[0.04] bg-[#030303]">
     <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
-          <div class="flex items-center gap-2 mb-4">
-            <div class="w-8 h-8 bg-brand-500 rounded-xl flex items-center justify-center">
+          <div class="flex items-center gap-2.5 mb-5">
+            <div class="w-9 h-9 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center">
               <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
             </div>
-            <span class="text-lg font-bold">Compralo</span>
+            <span class="text-lg font-extrabold">Compralo</span>
           </div>
-          <p class="text-sm text-zinc-500 leading-relaxed">Tu tienda de confianza para celulares nuevos, originales y con garantia oficial.</p>
-          <div class="flex gap-3 mt-4">
-            <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-500/20 hover:text-brand-400 transition-all">
+          <p class="text-sm text-zinc-500 leading-relaxed mb-5">Tu tienda de confianza para celulares nuevos, originales y con garantia oficial.</p>
+          <div class="flex gap-3">
+            <a href="#" class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-brand-500/20 hover:border-brand-500/30 hover:text-brand-400 transition-all duration-300">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
             </a>
-            <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-500/20 hover:text-brand-400 transition-all">
+            <a href="#" class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-brand-500/20 hover:border-brand-500/30 hover:text-brand-400 transition-all duration-300">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
             </a>
-            <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-500/20 hover:text-brand-400 transition-all">
+            <a href="https://wa.me/5491112345678" target="_blank" class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center hover:bg-[#25d366]/20 hover:border-[#25d366]/30 hover:text-[#25d366] transition-all duration-300">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             </a>
           </div>
         </div>
         <div>
-          <h4 class="font-semibold mb-4">Categorias</h4>
-          <div class="space-y-2">
+          <h4 class="font-bold mb-5 text-white">Categorias</h4>
+          <div class="space-y-2.5">
             <a href="#productos" class="block text-sm text-zinc-500 hover:text-brand-400 transition-colors" onclick="setCategory('Samsung')">Samsung</a>
             <a href="#productos" class="block text-sm text-zinc-500 hover:text-brand-400 transition-colors" onclick="setCategory('Apple')">Apple</a>
             <a href="#productos" class="block text-sm text-zinc-500 hover:text-brand-400 transition-colors" onclick="setCategory('Motorola')">Motorola</a>
             <a href="#productos" class="block text-sm text-zinc-500 hover:text-brand-400 transition-colors" onclick="setCategory('Xiaomi')">Xiaomi</a>
-            <a href="#productos" class="block text-sm text-zinc-500 hover:text-brand-400 transition-colors" onclick="setCategory('Accesorios')">Accesorios</a>
           </div>
         </div>
         <div>
-          <h4 class="font-semibold mb-4">Informacion</h4>
-          <div class="space-y-2">
+          <h4 class="font-bold mb-5 text-white">Informacion</h4>
+          <div class="space-y-2.5">
             <a href="#" class="block text-sm text-zinc-500 hover:text-brand-400 transition-colors">Envios</a>
             <a href="#" class="block text-sm text-zinc-500 hover:text-brand-400 transition-colors">Garantia</a>
             <a href="#" class="block text-sm text-zinc-500 hover:text-brand-400 transition-colors">Medios de pago</a>
@@ -301,24 +577,24 @@
           </div>
         </div>
         <div>
-          <h4 class="font-semibold mb-4">Contacto</h4>
+          <h4 class="font-bold mb-5 text-white">Contacto</h4>
           <div class="space-y-3">
-            <a href="#" class="flex items-center gap-2 text-sm text-zinc-500 hover:text-brand-400 transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+            <a href="#" class="flex items-center gap-2.5 text-sm text-zinc-500 hover:text-brand-400 transition-colors">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
               Buenos Aires, Argentina
             </a>
-            <a href="tel:+5491112345678" class="flex items-center gap-2 text-sm text-zinc-500 hover:text-brand-400 transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+            <a href="tel:+5491112345678" class="flex items-center gap-2.5 text-sm text-zinc-500 hover:text-brand-400 transition-colors">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
               +54 11 1234-5678
             </a>
-            <a href="mailto:ventas@compralo.com.ar" class="flex items-center gap-2 text-sm text-zinc-500 hover:text-brand-400 transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+            <a href="mailto:ventas@compralo.com.ar" class="flex items-center gap-2.5 text-sm text-zinc-500 hover:text-brand-400 transition-colors">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
               ventas@compralo.com.ar
             </a>
           </div>
         </div>
       </div>
-      <div class="border-t border-white/5 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="border-t border-white/[0.04] mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <p class="text-xs text-zinc-600">&copy; 2026 Compralo. Todos los derechos reservados.</p>
         <div class="flex gap-6 text-xs text-zinc-600">
           <a href="#" class="hover:text-zinc-400 transition-colors">Privacidad</a>
@@ -330,124 +606,222 @@
   </footer>
 
   <!-- CART SIDEBAR -->
-  <div id="cartOverlay" class="fixed inset-0 bg-black/60 z-50 hidden opacity-0 transition-opacity duration-300" onclick="toggleCart()"></div>
-  <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-[#0f0f0f] border-l border-white/10 z-50 translate-x-full transition-transform duration-300 flex flex-col">
-    <div class="flex items-center justify-between p-4 border-b border-white/10">
-      <h3 class="text-lg font-bold flex items-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-5.98.572l-.003.048a.75.75 0 00.738.867h.333m3.912-1.487h6.088m0 0a3 3 0 105.98.572l.003.048a.75.75 0 01-.738.867h-6.245m0 0L7.5 14.25m0 0l-1.394-5.228M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+  <div id="cartOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300" onclick="toggleCart()"></div>
+  <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full sm:w-[440px] bg-[#0a0a0a] border-l border-white/[0.06] z-50 translate-x-full transition-transform duration-400 flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-white/[0.06]">
+      <h3 class="text-lg font-bold flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-brand-500/10 flex items-center justify-center">
+          <svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+        </div>
         Carrito (<span id="cartTitleCount">0</span>)
       </h3>
-      <button onclick="toggleCart()" class="p-2 hover:bg-white/5 rounded-full transition-colors">
+      <button onclick="toggleCart()" class="p-2 hover:bg-white/[0.06] rounded-xl transition-all">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
     <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-3">
-      <!-- JS fills this -->
+      <!-- JS fills -->
     </div>
     <div id="cartEmpty" class="flex-1 flex flex-col items-center justify-center text-zinc-500">
-      <svg class="w-16 h-16 mb-4 opacity-20" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-5.98.572l-.003.048a.75.75 0 00.738.867h.333m3.912-1.487h6.088m0 0a3 3 0 105.98.572l.003.048a.75.75 0 01-.738.867h-6.245m0 0L7.5 14.25m0 0l-1.394-5.228M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
-      <p>Tu carrito esta vacio</p>
-      <button onclick="toggleCart()" class="mt-4 px-6 py-2 border border-white/10 rounded-full text-sm hover:bg-white/5 transition-colors">Seguir comprando</button>
-    </div>
-    <div id="cartFooter" class="hidden border-t border-white/10 p-4 space-y-3">
-      <div class="flex justify-between text-lg font-bold">
-        <span>Total</span>
-        <span id="cartTotal" class="text-brand-400">$0</span>
+      <div class="w-20 h-20 rounded-2xl bg-white/[0.03] flex items-center justify-center mb-4">
+        <svg class="w-10 h-10 opacity-20" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
       </div>
-      <button onclick="checkout()" class="w-full bg-brand-500 hover:bg-brand-600 text-black font-bold h-12 rounded-xl text-base transition-colors flex items-center justify-center gap-2">
+      <p class="font-medium">Tu carrito esta vacio</p>
+      <p class="text-sm text-zinc-600 mt-1">Agrega productos para comenzar</p>
+      <button onclick="toggleCart()" class="mt-6 px-6 py-2.5 border border-white/10 rounded-xl text-sm hover:bg-white/5 transition-all">Seguir comprando</button>
+    </div>
+    <div id="cartFooter" class="hidden border-t border-white/[0.06] p-5 space-y-4 bg-[#0a0a0a]">
+      <div class="flex justify-between items-center">
+        <span class="text-zinc-400">Total</span>
+        <span id="cartTotal" class="text-2xl font-black text-brand-400">$0</span>
+      </div>
+      <button onclick="checkout()" class="btn-whatsapp w-full text-white font-bold h-14 rounded-2xl text-base flex items-center justify-center gap-2.5">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Confirmar por WhatsApp
+        Finalizar pedido por WhatsApp
       </button>
-      <button onclick="toggleCart()" class="w-full border border-white/10 hover:bg-white/5 h-10 rounded-xl text-sm transition-colors">Seguir Comprando</button>
+      <button onclick="toggleCart()" class="w-full border border-white/[0.08] hover:bg-white/[0.04] h-11 rounded-xl text-sm transition-all text-zinc-400">Seguir Comprando</button>
     </div>
   </div>
 
   <!-- PRODUCT DETAIL MODAL -->
-  <div id="productModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4" onclick="if(event.target===this)closeModal()">
-    <div class="bg-[#0f0f0f] border border-white/10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative">
-      <button onclick="closeModal()" class="absolute top-4 right-4 p-2 hover:bg-white/5 rounded-full transition-colors">
+  <div id="productModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="if(event.target===this)closeModal()">
+    <div class="bg-[#0a0a0a] border border-white/[0.08] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl shadow-black/50">
+      <button onclick="closeModal()" class="absolute top-4 right-4 p-2 hover:bg-white/[0.06] rounded-xl transition-all z-10">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
-      <div id="modalContent">
-        <!-- JS fills this -->
+      <div id="modalContent" class="p-6">
+        <!-- JS fills -->
       </div>
     </div>
   </div>
 
-  <!-- FLOATING WHATSAPP -->
-  <a href="https://wa.me/5491112345678" target="_blank" class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-brand-500 rounded-full flex items-center justify-center shadow-lg shadow-brand-500/25 hover:scale-110 transition-transform">
-    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <!-- TOAST CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] flex flex-col gap-2 items-center pointer-events-none"></div>
+
+  <!-- FLOATING WHATSAPP BUTTON -->
+  <a href="https://wa.me/5491112345678?text=Hola!%20Quiero%20info%20sobre%20celulares" target="_blank" class="fixed bottom-6 right-6 z-40 group">
+    <div class="w-16 h-16 bg-gradient-to-br from-[#25d366] to-[#128c7e] rounded-full flex items-center justify-center shadow-xl shadow-[#25d366]/20 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-[#25d366]/30 transition-all duration-300">
+      <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </div>
+    <!-- Tooltip -->
+    <div class="absolute bottom-full right-0 mb-3 whitespace-nowrap bg-white text-black text-sm font-medium px-4 py-2 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+      Chateanos por WhatsApp
+      <div class="absolute top-full right-6 w-3 h-3 bg-white transform rotate-45 -mt-1.5"></div>
+    </div>
   </a>
 
   <!-- JAVASCRIPT -->
   <script>
     // ============================
-    //  PRODUCTOS DATA
+    //  CONFIG
     // ============================
-    const PRODUCTOS = [
-      { id:1, nombre:"Samsung Galaxy S24 Ultra", marca:"Samsung", precio:1899999, precioAnterior:2199999, categoria:"Samsung", specs:["256GB","12GB RAM","200MP","6.8\""], stock:15, destacado:true, nuevo:true },
-      { id:2, nombre:"iPhone 15 Pro Max", marca:"Apple", precio:2299999, precioAnterior:2599999, categoria:"Apple", specs:["256GB","8GB RAM","48MP","6.7\""], stock:8, destacado:true },
-      { id:3, nombre:"Motorola Edge 40 Pro", marca:"Motorola", precio:749999, precioAnterior:899999, categoria:"Motorola", specs:["256GB","12GB RAM","50MP","6.67\""], stock:20, destacado:true },
-      { id:4, nombre:"Xiaomi 14 Ultra", marca:"Xiaomi", precio:1299999, categoria:"Xiaomi", specs:["512GB","16GB RAM","50MP Leica","6.73\""], stock:12, nuevo:true },
-      { id:5, nombre:"Samsung Galaxy A55", marca:"Samsung", precio:549999, precioAnterior:649999, categoria:"Samsung", specs:["128GB","8GB RAM","50MP","6.6\""], stock:30 },
-      { id:6, nombre:"iPhone 15", marca:"Apple", precio:1499999, categoria:"Apple", specs:["128GB","6GB RAM","48MP","6.1\""], stock:10 },
-      { id:7, nombre:"Motorola Moto G84", marca:"Motorola", precio:349999, precioAnterior:399999, categoria:"Motorola", specs:["256GB","12GB RAM","50MP","6.55\""], stock:25 },
-      { id:8, nombre:"Xiaomi Redmi Note 13 Pro", marca:"Xiaomi", precio:399999, categoria:"Xiaomi", specs:["256GB","8GB RAM","200MP","6.67\""], stock:18, nuevo:true },
-      { id:9, nombre:"Samsung Galaxy Z Flip5", marca:"Samsung", precio:1399999, precioAnterior:1699999, categoria:"Samsung", specs:["256GB","8GB RAM","12MP","6.7\""], stock:5, destacado:true },
-      { id:10, nombre:"iPhone 14", marca:"Apple", precio:1099999, precioAnterior:1299999, categoria:"Apple", specs:["128GB","6GB RAM","12MP","6.1\""], stock:14 },
-      { id:11, nombre:"Motorola Moto G54", marca:"Motorola", precio:249999, categoria:"Motorola", specs:["128GB","8GB RAM","50MP","6.5\""], stock:35 },
-      { id:12, nombre:"Xiaomi Poco X6 Pro", marca:"Xiaomi", precio:499999, precioAnterior:579999, categoria:"Xiaomi", specs:["256GB","8GB RAM","64MP","6.67\""], stock:22 },
-    ];
-
-    const CATEGORIAS = ["Todos","Samsung","Apple","Motorola","Xiaomi"];
+    const WA_NUMBER = '5491112345678';
+    const CATEGORIAS = ['Todos', 'Samsung', 'Apple', 'Motorola', 'Xiaomi'];
 
     // ============================
-    //  STATE
+    //  STATE (immutable updates)
     // ============================
+    let allProducts = [];
     let cart = [];
-    let currentCategory = "Todos";
-    let searchTerm = "";
+    let currentCategory = 'Todos';
+    let searchTerm = '';
+    let maxPrice = 3000000;
+    let isLoading = true;
 
     // ============================
     //  HELPERS
     // ============================
-    const fmt = (n) => n.toLocaleString('es-AR', { style:'currency', currency:'ARS', maximumFractionDigits:0 });
+    const fmt = (n) => n.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
     const disc = (p, a) => Math.round(((a - p) / a) * 100);
+    const getImgUrl = (name) => `https://placehold.co/400x400/1a1a1a/10b981?text=${encodeURIComponent(name.replace(/ /g, '+'))}`;
+    const waUrl = (text) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+
+    // ============================
+    //  FETCH PRODUCTS FROM API
+    // ============================
+    async function fetchProducts() {
+      isLoading = true;
+      showSkeletons();
+      try {
+        const res = await fetch('/api/productos');
+        if (!res.ok) throw new Error('Error fetching products');
+        allProducts = await res.json();
+      } catch (err) {
+        // Fallback: use empty array, show error toast
+        allProducts = [];
+        showToast('Error cargando productos', 'error');
+      }
+      isLoading = false;
+      hideSkeletons();
+      renderAll();
+    }
+
+    function showSkeletons() {
+      const sk = document.getElementById('skeletonGrid');
+      const pg = document.getElementById('productGrid');
+      if (sk) sk.classList.remove('hidden');
+      if (pg) pg.classList.add('hidden');
+    }
+
+    function hideSkeletons() {
+      const sk = document.getElementById('skeletonGrid');
+      const pg = document.getElementById('productGrid');
+      if (sk) sk.classList.add('hidden');
+      if (pg) pg.classList.remove('hidden');
+    }
+
+    // ============================
+    //  TOAST NOTIFICATIONS
+    // ============================
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const bgColor = type === 'success' ? 'from-brand-500 to-brand-600' : 'from-red-500 to-red-600';
+      toast.className = `toast-in pointer-events-auto bg-gradient-to-r ${bgColor} text-white px-6 py-3 rounded-2xl text-sm font-semibold shadow-xl flex items-center gap-2`;
+      const icon = type === 'success'
+        ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>'
+        : '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>';
+      toast.innerHTML = `${icon} ${message}`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.className = toast.className.replace('toast-in', 'toast-out');
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
 
     // ============================
     //  RENDER FUNCTIONS
     // ============================
-
-    function renderProductCard(p, size = "normal") {
-      const isSmall = size === "small";
-      const imgSize = isSmall ? "w-14 h-14" : "w-20 h-20";
-      const discBadge = p.precioAnterior ? `<span class="absolute top-2 left-2 bg-red-500/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">-${disc(p.precio, p.precioAnterior)}%</span>` : '';
-      const newBadge = p.nuevo ? `<span class="absolute top-2 right-2 bg-cyan-500/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">NUEVO</span>` : '';
-      const oldPrice = p.precioAnterior ? `<p class="text-[10px] text-zinc-600 line-through">${fmt(p.precioAnterior)}</p>` : '';
-      const specsHtml = p.specs.slice(0, 2).map(s => `<span class="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-zinc-500">${s}</span>`).join('');
+    function renderProductCard(p) {
+      const hasDiscount = p.precioAnterior && p.precioAnterior > p.precio;
+      const discBadge = hasDiscount
+        ? `<div class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-lg shadow-red-500/20">-${disc(p.precio, p.precioAnterior)}%</div>`
+        : '';
+      const newBadge = p.nuevo
+        ? `<div class="absolute top-3 right-3 bg-cyan-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-lg shadow-cyan-500/20">NUEVO</div>`
+        : '';
+      const oldPrice = hasDiscount
+        ? `<p class="text-xs text-zinc-600 line-through">${fmt(p.precioAnterior)}</p>`
+        : '';
+      const specs = (p.specs || []).slice(0, 3).map(s =>
+        `<span class="text-[11px] px-2 py-0.5 rounded-lg bg-white/[0.04] text-zinc-500 border border-white/[0.04]">${s}</span>`
+      ).join('');
+      const stars = '<svg class="w-3 h-3 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>';
+      const waMsg = `Hola! Me interesa el ${p.nombre} a ${fmt(p.precio)}`;
 
       return `
-        <div class="card-product bg-white/[0.03] border border-white/5 rounded-2xl cursor-pointer overflow-hidden" onclick="openModal(${p.id})">
-          <div class="p-3 md:p-4">
-            <div class="relative aspect-square bg-gradient-to-br from-white/5 to-transparent rounded-xl mb-3 flex items-center justify-center overflow-hidden">
-              <svg class="card-img ${imgSize} text-zinc-700" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+        <div class="glass-card rounded-2xl cursor-pointer overflow-hidden group" onclick="openModal(${p.id})">
+          <div class="p-4">
+            <div class="relative aspect-square bg-gradient-to-br from-white/[0.04] to-transparent rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+              <img src="${getImgUrl(p.nombre)}" alt="${p.nombre}" class="card-img w-full h-full object-cover rounded-xl" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+              <div class="hidden w-20 h-20 text-zinc-700 items-center justify-center">
+                <svg class="w-20 h-20" fill="none" stroke="currentColor" stroke-width="0.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+              </div>
               ${discBadge}${newBadge}
             </div>
-            <p class="text-[10px] text-zinc-500 uppercase tracking-wider">${p.marca}</p>
-            <h3 class="font-semibold text-xs md:text-sm leading-tight mt-0.5">${p.nombre}</h3>
-            <div class="flex items-center gap-1 mt-1.5">
-              ${'<svg class="w-3 h-3 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>'.repeat(5)}
-              <span class="text-[10px] text-zinc-500 ml-0.5">(4.9)</span>
+            <p class="text-[11px] text-zinc-500 uppercase tracking-widest font-medium">${p.marca}</p>
+            <h3 class="font-bold text-sm leading-tight mt-1 group-hover:text-brand-400 transition-colors">${p.nombre}</h3>
+            <div class="flex items-center gap-0.5 mt-2">
+              ${stars.repeat(5)}
+              <span class="text-[11px] text-zinc-500 ml-1">(4.9)</span>
             </div>
-            <div class="flex flex-wrap gap-1 mt-2">${specsHtml}</div>
-            <div class="mt-2">
+            <div class="flex flex-wrap gap-1 mt-2.5">${specs}</div>
+            <div class="mt-3">
               ${oldPrice}
-              <p class="text-base md:text-lg font-bold text-brand-400">${fmt(p.precio)}</p>
-              <p class="text-[10px] text-zinc-500">12x ${fmt(Math.round(p.precio / 12))}</p>
+              <p class="text-xl font-black text-brand-400">${fmt(p.precio)}</p>
+              <p class="text-[11px] text-zinc-500 mt-0.5">12x ${fmt(Math.round(p.precio / 12))} sin interes</p>
             </div>
-            <button onclick="event.stopPropagation();addToCart(${p.id})" class="btn-cart w-full mt-2 flex items-center justify-center gap-1.5 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-xl h-8 md:h-9 text-xs md:text-sm font-semibold transition-all">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-5.98.572l-.003.048a.75.75 0 00.738.867h.333m3.912-1.487h6.088m0 0a3 3 0 105.98.572l.003.048a.75.75 0 01-.738.867h-6.245m0 0L7.5 14.25m0 0l-1.394-5.228M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
-              Agregar
+            <div class="flex gap-2 mt-4">
+              <button onclick="event.stopPropagation();addToCart(${p.id})" class="btn-ghost flex-1 flex items-center justify-center gap-1.5 text-brand-400 rounded-xl h-10 text-sm font-semibold">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+                Agregar
+              </button>
+              <a href="${waUrl(waMsg)}" target="_blank" onclick="event.stopPropagation()" class="w-10 h-10 rounded-xl bg-[#25d366]/10 border border-[#25d366]/20 flex items-center justify-center text-[#25d366] hover:bg-[#25d366] hover:text-white transition-all flex-shrink-0">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCarouselCard(p) {
+      const hasDiscount = p.precioAnterior && p.precioAnterior > p.precio;
+      const discBadge = hasDiscount
+        ? `<div class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">-${disc(p.precio, p.precioAnterior)}%</div>`
+        : '';
+      return `
+        <div class="min-w-[280px] sm:min-w-[300px] glass-card rounded-2xl cursor-pointer overflow-hidden group" onclick="openModal(${p.id})">
+          <div class="p-4">
+            <div class="relative aspect-square bg-gradient-to-br from-white/[0.04] to-transparent rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+              <img src="${getImgUrl(p.nombre)}" alt="${p.nombre}" class="card-img w-full h-full object-cover rounded-xl" loading="lazy" />
+              ${discBadge}
+            </div>
+            <p class="text-[11px] text-zinc-500 uppercase tracking-widest font-medium">${p.marca}</p>
+            <h3 class="font-bold text-sm leading-tight mt-1 group-hover:text-brand-400 transition-colors">${p.nombre}</h3>
+            <p class="text-xl font-black text-brand-400 mt-2">${fmt(p.precio)}</p>
+            <button onclick="event.stopPropagation();addToCart(${p.id})" class="btn-primary w-full mt-3 flex items-center justify-center gap-1.5 text-black rounded-xl h-10 text-sm font-bold">
+              Agregar al carrito
             </button>
           </div>
         </div>
@@ -455,25 +829,36 @@
     }
 
     function renderDestacados() {
-      const dest = PRODUCTOS.filter(p => p.destacado);
-      document.getElementById('destacados').innerHTML = dest.map(p => renderProductCard(p)).join('');
+      const dest = allProducts.filter(p => p.destacado);
+      const container = document.getElementById('carouselContainer');
+      if (dest.length === 0) {
+        container.innerHTML = '<p class="text-zinc-500">No hay productos destacados</p>';
+        return;
+      }
+      container.innerHTML = dest.map(p => renderCarouselCard(p)).join('');
     }
 
     function renderFilters() {
       document.getElementById('catFilters').innerHTML = CATEGORIAS.map(cat =>
-        `<button onclick="setCategory('${cat}')" class="px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+        `<button onclick="setCategory('${cat}')" class="px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-300 ${
           currentCategory === cat
-            ? 'bg-brand-500 text-black'
-            : 'bg-white/5 text-zinc-400 hover:bg-white/10 border border-white/5'
+            ? 'bg-gradient-to-r from-brand-500 to-brand-600 text-black shadow-lg shadow-brand-500/20'
+            : 'bg-white/[0.04] text-zinc-400 hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/[0.12]'
         }">${cat}</button>`
       ).join('');
     }
 
     function renderProducts() {
-      const filtered = PRODUCTOS.filter(p => {
-        const matchCat = currentCategory === "Todos" || p.categoria === currentCategory;
-        const matchSearch = !searchTerm || p.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || p.marca.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchCat && matchSearch;
+      const priceRangeEl = document.getElementById('priceRange');
+      const maxPriceVal = priceRangeEl ? Number(priceRangeEl.value) : 3000000;
+
+      const filtered = allProducts.filter(p => {
+        const matchCat = currentCategory === 'Todos' || p.categoria === currentCategory || p.marca === currentCategory;
+        const matchSearch = !searchTerm ||
+          p.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.marca.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchPrice = p.precio <= maxPriceVal;
+        return matchCat && matchSearch && matchPrice;
       });
 
       const grid = document.getElementById('productGrid');
@@ -484,8 +869,18 @@
         empty.classList.remove('hidden');
       } else {
         empty.classList.add('hidden');
-        grid.innerHTML = filtered.map(p => renderProductCard(p, 'small')).join('');
+        grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
       }
+    }
+
+    function renderOfertas() {
+      const ofertas = allProducts.filter(p => p.precioAnterior && p.precioAnterior > p.precio);
+      const container = document.getElementById('ofertasGrid');
+      if (ofertas.length === 0) {
+        container.innerHTML = '<p class="text-zinc-500 text-center col-span-full py-8">No hay ofertas disponibles en este momento</p>';
+        return;
+      }
+      container.innerHTML = ofertas.map(p => renderProductCard(p)).join('');
     }
 
     function renderCart() {
@@ -517,34 +912,41 @@
         empty.classList.add('hidden');
         footer.classList.remove('hidden');
         items.innerHTML = cart.map(item => `
-          <div class="flex gap-3 bg-white/5 rounded-xl p-3 border border-white/5">
-            <div class="w-14 h-14 bg-white/5 rounded-lg flex items-center justify-center flex-shrink-0">
-              <svg class="w-7 h-7 text-zinc-600" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+          <div class="flex gap-3 glass-card rounded-xl p-3">
+            <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+              <img src="${getImgUrl(item.nombre)}" alt="${item.nombre}" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium truncate">${item.nombre}</p>
+              <p class="text-sm font-semibold truncate">${item.nombre}</p>
               <p class="text-brand-400 text-sm font-bold mt-1">${fmt(item.precio)}</p>
               <div class="flex items-center gap-2 mt-2">
-                <button onclick="updateQty(${item.id},-1)" class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors text-xs">-</button>
-                <span class="text-sm w-6 text-center">${item.cantidad}</span>
-                <button onclick="updateQty(${item.id},1)" class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors text-xs">+</button>
+                <button onclick="updateQty(${item.id},-1)" class="w-7 h-7 rounded-lg bg-white/[0.08] flex items-center justify-center hover:bg-white/[0.15] transition-colors text-xs font-bold">-</button>
+                <span class="text-sm w-6 text-center font-medium">${item.cantidad}</span>
+                <button onclick="updateQty(${item.id},1)" class="w-7 h-7 rounded-lg bg-white/[0.08] flex items-center justify-center hover:bg-white/[0.15] transition-colors text-xs font-bold">+</button>
               </div>
             </div>
             <div class="flex flex-col items-end justify-between">
-              <button onclick="removeFromCart(${item.id})" class="text-zinc-500 hover:text-red-400 transition-colors">
+              <button onclick="removeFromCart(${item.id})" class="text-zinc-500 hover:text-red-400 transition-colors p-1">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
               </button>
-              <p class="text-xs text-zinc-500">${fmt(item.precio * item.cantidad)}</p>
+              <p class="text-xs text-zinc-500 font-medium">${fmt(item.precio * item.cantidad)}</p>
             </div>
           </div>
         `).join('');
       }
     }
 
+    function renderAll() {
+      renderFilters();
+      renderProducts();
+      renderDestacados();
+      renderOfertas();
+      renderCart();
+    }
+
     // ============================
     //  ACTIONS
     // ============================
-
     function setCategory(cat) {
       currentCategory = cat;
       renderFilters();
@@ -554,20 +956,43 @@
     function filterProducts() {
       const desktop = document.getElementById('searchDesktop').value;
       const mobile = document.getElementById('searchMobile').value;
-      searchTerm = desktop || mobile;
+      const filter = document.getElementById('searchFilter').value;
+      searchTerm = desktop || mobile || filter;
+      // Sync search inputs
+      document.getElementById('searchDesktop').value = searchTerm;
+      document.getElementById('searchMobile').value = searchTerm;
+      document.getElementById('searchFilter').value = searchTerm;
+      renderProducts();
+    }
+
+    function resetFilters() {
+      currentCategory = 'Todos';
+      searchTerm = '';
+      document.getElementById('searchDesktop').value = '';
+      document.getElementById('searchMobile').value = '';
+      document.getElementById('searchFilter').value = '';
+      const priceRange = document.getElementById('priceRange');
+      priceRange.value = priceRange.max;
+      document.getElementById('priceLabel').textContent = fmt(Number(priceRange.max));
+      renderFilters();
       renderProducts();
     }
 
     function addToCart(id) {
-      const p = PRODUCTOS.find(x => x.id === id);
+      const p = allProducts.find(x => x.id === id);
       if (!p) return;
       const existing = cart.find(x => x.id === id);
       if (existing) {
-        existing.cantidad = Math.min(existing.cantidad + 1, p.stock);
+        cart = cart.map(item =>
+          item.id === id
+            ? { ...item, cantidad: Math.min(item.cantidad + 1, p.stock || 99) }
+            : item
+        );
       } else {
-        cart.push({ ...p, cantidad: 1 });
+        cart = [...cart, { ...p, cantidad: 1 }];
       }
       renderCart();
+      showToast(`${p.nombre} agregado al carrito`);
       // Flash badge
       const badge = document.getElementById('cartBadge');
       badge.classList.add('scale-125');
@@ -582,9 +1007,13 @@
     function updateQty(id, delta) {
       const item = cart.find(x => x.id === id);
       if (!item) return;
-      item.cantidad += delta;
-      if (item.cantidad <= 0) { removeFromCart(id); return; }
-      item.cantidad = Math.min(item.cantidad, item.stock);
+      const newQty = item.cantidad + delta;
+      if (newQty <= 0) { removeFromCart(id); return; }
+      cart = cart.map(i =>
+        i.id === id
+          ? { ...i, cantidad: Math.min(newQty, i.stock || 99) }
+          : i
+      );
       renderCart();
     }
 
@@ -607,47 +1036,65 @@
       }
     }
 
+    function toggleMobile() {
+      const menu = document.getElementById('mobileMenu');
+      const menuIcon = document.getElementById('menuIcon');
+      const closeIcon = document.getElementById('closeIcon');
+      menu.classList.toggle('hidden');
+      menuIcon.classList.toggle('hidden');
+      closeIcon.classList.toggle('hidden');
+    }
+
     function openModal(id) {
-      const p = PRODUCTOS.find(x => x.id === id);
+      const p = allProducts.find(x => x.id === id);
       if (!p) return;
-      const discBadge = p.precioAnterior ? `<span class="inline-block bg-red-500/90 text-white text-xs font-bold px-3 py-1 rounded-full mb-2">-${disc(p.precio, p.precioAnterior)}% OFF</span>` : '';
-      const oldPrice = p.precioAnterior ? `<p class="text-sm text-zinc-600 line-through">${fmt(p.precioAnterior)}</p>` : '';
-      const newBadge = p.nuevo ? `<span class="inline-block bg-cyan-500/90 text-white text-xs font-bold px-3 py-1 rounded-full mb-2 ml-2">NUEVO</span>` : '';
+      const hasDiscount = p.precioAnterior && p.precioAnterior > p.precio;
+      const discBadge = hasDiscount ? `<span class="inline-block bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg mr-2">-${disc(p.precio, p.precioAnterior)}% OFF</span>` : '';
+      const oldPrice = hasDiscount ? `<p class="text-sm text-zinc-600 line-through">${fmt(p.precioAnterior)}</p>` : '';
+      const newBadge = p.nuevo ? `<span class="inline-block bg-cyan-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg">NUEVO</span>` : '';
+      const stars = '<svg class="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>';
+      const waMsg = `Hola! Me interesa el ${p.nombre} a ${fmt(p.precio)}`;
 
       document.getElementById('modalContent').innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="aspect-square bg-gradient-to-br from-white/5 to-transparent rounded-2xl flex items-center justify-center">
-            <svg class="w-32 h-32 text-zinc-700" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+          <div class="aspect-square bg-gradient-to-br from-white/[0.04] to-transparent rounded-2xl flex items-center justify-center overflow-hidden">
+            <img src="${getImgUrl(p.nombre)}" alt="${p.nombre}" class="w-full h-full object-cover rounded-2xl" />
           </div>
           <div>
-            <p class="text-sm text-zinc-500 uppercase tracking-wider">${p.marca}</p>
-            <h2 class="text-xl font-bold mt-1">${p.nombre}</h2>
-            <div>${discBadge}${newBadge}</div>
-            <div class="flex items-center gap-1 mt-2">
-              ${'<svg class="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>'.repeat(5)}
+            <p class="text-sm text-zinc-500 uppercase tracking-widest font-medium">${p.marca}</p>
+            <h2 class="text-2xl font-black mt-1">${p.nombre}</h2>
+            <div class="mt-2">${discBadge}${newBadge}</div>
+            <div class="flex items-center gap-0.5 mt-3">
+              ${stars.repeat(5)}
               <span class="text-sm text-zinc-500 ml-1">(4.9) - 50+ vendidos</span>
             </div>
-            <div class="mt-4">
+            <div class="mt-5">
               ${oldPrice}
-              <p class="text-3xl font-bold text-brand-400">${fmt(p.precio)}</p>
+              <p class="text-4xl font-black text-brand-400">${fmt(p.precio)}</p>
               <p class="text-sm text-zinc-500 mt-1">12 cuotas sin interes de ${fmt(Math.round(p.precio / 12))}</p>
             </div>
-            <div class="flex flex-wrap gap-2 mt-4">
-              ${p.specs.map(s => `<span class="text-xs px-3 py-1.5 rounded-full bg-white/5 text-zinc-400 border border-white/5">${s}</span>`).join('')}
+            <div class="flex flex-wrap gap-2 mt-5">
+              ${(p.specs || []).map(s => `<span class="text-xs px-3 py-1.5 rounded-xl bg-white/[0.04] text-zinc-400 border border-white/[0.06]">${s}</span>`).join('')}
             </div>
-            <div class="flex items-center gap-2 mt-4 text-sm text-brand-400">
+            <div class="flex items-center gap-2 mt-5 text-sm text-brand-400">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
               Envio gratis a todo el pais
             </div>
-            <div class="flex items-center gap-2 mt-1 text-sm text-zinc-500">
+            <div class="flex items-center gap-2 mt-2 text-sm text-zinc-500">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
               Garantia oficial 12 meses
             </div>
-            <p class="text-xs text-zinc-600 mt-3">Stock disponible: ${p.stock} unidades</p>
-            <button onclick="addToCart(${p.id});closeModal();toggleCart()" class="w-full mt-4 bg-brand-500 hover:bg-brand-600 text-black font-bold h-12 rounded-xl text-base transition-colors flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-5.98.572l-.003.048a.75.75 0 00.738.867h.333m3.912-1.487h6.088m0 0a3 3 0 105.98.572l.003.048a.75.75 0 01-.738.867h-6.245m0 0L7.5 14.25m0 0l-1.394-5.228M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
-              Agregar al carrito
-            </button>
+            <p class="text-xs text-zinc-600 mt-4">Stock disponible: ${p.stock || 'Consultar'} unidades</p>
+            <div class="flex gap-3 mt-5">
+              <button onclick="addToCart(${p.id});closeModal();toggleCart()" class="btn-primary flex-1 text-black font-bold h-12 rounded-xl text-base flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+                Agregar
+              </button>
+              <a href="${waUrl(waMsg)}" target="_blank" class="btn-whatsapp h-12 px-5 rounded-xl text-white font-bold flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                WhatsApp
+              </a>
+            </div>
           </div>
         </div>
       `;
@@ -665,38 +1112,61 @@
     }
 
     function checkout() {
-      const msg = encodeURIComponent(
-        'Hola! Quiero comprar:\n' +
-        cart.map(i => `- ${i.nombre} x${i.cantidad} (${fmt(i.precio * i.cantidad)})`).join('\n') +
-        '\n\nTotal: ' + fmt(cart.reduce((s, i) => s + i.precio * i.cantidad, 0))
-      );
-      window.open('https://wa.me/5491112345678?text=' + msg, '_blank');
+      if (cart.length === 0) return;
+      const total = cart.reduce((s, i) => s + i.precio * i.cantidad, 0);
+      let msg = 'Hola! Quiero hacer un pedido:\n\n';
+      cart.forEach(item => {
+        msg += `- ${item.nombre} x${item.cantidad} = ${fmt(item.precio * item.cantidad)}\n`;
+      });
+      msg += `\nTotal: ${fmt(total)}`;
+      window.open(waUrl(msg), '_blank');
     }
 
-    function toggleMobile() {
-      const menu = document.getElementById('mobileMenu');
-      const menuIcon = document.getElementById('menuIcon');
-      const closeIcon = document.getElementById('closeIcon');
-      menu.classList.toggle('hidden');
-      menuIcon.classList.toggle('hidden');
-      closeIcon.classList.toggle('hidden');
+    function scrollCarousel(dir) {
+      const container = document.getElementById('carouselContainer');
+      const scrollAmount = 320;
+      container.scrollBy({ left: scrollAmount * dir, behavior: 'smooth' });
+    }
+
+    // ============================
+    //  SCROLL-TRIGGERED ANIMATIONS
+    // ============================
+    function initScrollReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    // ============================
+    //  NAVBAR SCROLL EFFECT
+    // ============================
+    function initNavbarScroll() {
+      let lastScroll = 0;
+      window.addEventListener('scroll', () => {
+        const navbar = document.getElementById('navbar');
+        const scrollY = window.scrollY;
+        if (scrollY > 100) {
+          navbar.style.borderBottomColor = 'rgba(255,255,255,0.06)';
+        } else {
+          navbar.style.borderBottomColor = 'rgba(255,255,255,0.02)';
+        }
+        lastScroll = scrollY;
+      }, { passive: true });
     }
 
     // ============================
     //  INIT
     // ============================
-    renderDestacados();
-    renderFilters();
-    renderProducts();
-    renderCart();
-
-    // Keyboard shortcut: Escape closes modal/cart
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeModal();
-        const sidebar = document.getElementById('cartSidebar');
-        if (!sidebar.classList.contains('translate-x-full')) toggleCart();
-      }
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchProducts();
+      initScrollReveal();
+      initNavbarScroll();
     });
   </script>
 </body>

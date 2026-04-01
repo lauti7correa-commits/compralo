@@ -411,7 +411,7 @@
             </div>
             <div class="flex items-center gap-3 flex-1 sm:max-w-sm">
               <span class="text-xs text-zinc-500 whitespace-nowrap">Precio max:</span>
-              <input id="priceRange" type="range" min="0" max="3000000" value="3000000" step="50000" class="flex-1" oninput="filterProducts(); document.getElementById('priceLabel').textContent = fmt(Number(this.value));" />
+              <input id="priceRange" type="range" min="0" max="5000000" value="5000000" step="50000" class="flex-1" oninput="filterProducts(); document.getElementById('priceLabel').textContent = fmt(Number(this.value));" />
               <span id="priceLabel" class="text-xs text-brand-400 font-semibold min-w-[90px] text-right">$3.000.000</span>
             </div>
           </div>
@@ -685,7 +685,7 @@
     let cart = [];
     let currentCategory = 'Todos';
     let searchTerm = '';
-    let maxPrice = 3000000;
+    let maxPrice = 5000000;
     let isLoading = true;
 
     // ============================
@@ -705,7 +705,8 @@
       try {
         const res = await fetch('/api/productos');
         if (!res.ok) throw new Error('Error fetching products');
-        allProducts = await res.json();
+        const json = await res.json();
+        allProducts = json.data || [];
       } catch (err) {
         // Fallback: use empty array, show error toast
         allProducts = [];

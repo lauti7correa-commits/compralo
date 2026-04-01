@@ -1,12 +1,13 @@
 FROM node:22-alpine
 
-RUN apk add --no-cache git
-
 WORKDIR /app
 
-RUN git clone --branch compralo-cambios --single-branch https://github.com/lauti7correa-commits/compralo.git .
-
+COPY package*.json ./
 RUN npm ci --omit=dev
+
+COPY . .
+
+RUN echo "=== VERIFY FILES ===" && grep -c "Array.isArray" index.html && grep -c "no-cache" server.js && echo "=== END VERIFY ==="
 
 RUN node init-db.js
 

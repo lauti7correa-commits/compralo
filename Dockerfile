@@ -5,6 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev
 
+ARG CACHEBUST=1
 COPY . .
 
 RUN node init-db.js

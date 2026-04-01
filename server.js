@@ -448,11 +448,13 @@ app.get('/api/admin/stats', adminAuth, (req, res) => {
     const pedidosHoy = db.prepare("SELECT COUNT(*) as total FROM pedidos WHERE fecha LIKE ?").get(hoy + '%').total;
     const inicioMes = hoy.substring(0, 7);
     const ingresosMes = db.prepare("SELECT COALESCE(SUM(total), 0) as total FROM pedidos WHERE fecha LIKE ? AND estado != 'cancelado'").get(inicioMes + '%').total;
+    const stockBajo = db.prepare('SELECT COUNT(*) as total FROM productos WHERE activo = 1 AND stock < 5').get().total;
 
     return successResponse(res, {
       totalProductos,
       pedidosHoy,
-      ingresosMes
+      ingresosMes,
+      stockBajo
     });
   } catch (err) {
     return errorResponse(res, 'Error al obtener estadísticas', 500);

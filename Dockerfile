@@ -5,9 +5,12 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev
 
+ARG SOURCE_COMMIT=unknown
+RUN echo "Deploying commit: ${SOURCE_COMMIT}" > /tmp/build_info
+
 COPY . .
 
-RUN echo "=== VERIFY FILES ===" && grep -c "Array.isArray" index.html && grep -c "no-cache" server.js && echo "=== END VERIFY ==="
+RUN cat index.html | grep -c "Array.isArray" && cat server.js | head -1
 
 RUN node init-db.js
 

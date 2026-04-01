@@ -121,11 +121,11 @@ function adminAuth(req, res, next) {
 // API PUBLICA
 // =============================
 
-// Listar productos activos
+// Listar productos activos (devuelve array directo para el frontend)
 app.get('/api/productos', (req, res) => {
   try {
     const productos = db.prepare('SELECT * FROM productos WHERE activo = 1 ORDER BY id').all();
-    return successResponse(res, parseProductList(productos));
+    return res.json(parseProductList(productos));
   } catch (err) {
     return errorResponse(res, 'Error al obtener productos', 500);
   }

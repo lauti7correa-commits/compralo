@@ -706,7 +706,7 @@
         const res = await fetch('/api/productos');
         if (!res.ok) throw new Error('Error fetching products');
         const json = await res.json();
-        allProducts = json.data || [];
+        allProducts = Array.isArray(json) ? json : (json.data || []);
       } catch (err) {
         // Fallback: use empty array, show error toast
         allProducts = [];

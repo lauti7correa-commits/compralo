@@ -53,8 +53,16 @@ const pedidosLimiter = rateLimit({
 // Body parser con límite de tamaño
 app.use(express.json({ limit: '1mb' }));
 
-// Archivos estáticos
-app.use(express.static(__dirname));
+// Archivos estáticos (no-cache para HTML)
+app.use(express.static(__dirname, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    }
+  }
+}));
 
 // =============================
 // UTILIDADES

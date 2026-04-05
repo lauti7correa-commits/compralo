@@ -18,6 +18,30 @@
   <meta name="twitter:description" content="Samsung, Apple, Motorola y Xiaomi con financiacion y envio gratis." />
   <meta name="theme-color" content="#10b981" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>📱</text></svg>" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "Compralo",
+    "description": "Tienda de celulares - Samsung, Apple, Motorola, Xiaomi con financiacion y envio gratis en Argentina",
+    "url": "https://compralo.store",
+    "telephone": "+5491112345678",
+    "currenciesAccepted": "ARS",
+    "paymentAccepted": "Efectivo, Transferencia, Tarjeta de credito",
+    "priceRange": "$299.999 - $4.899.990",
+    "areaServed": { "@type": "Country", "name": "Argentina" },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Celulares",
+      "itemListElement": [
+        { "@type": "OfferCatalog", "name": "Samsung" },
+        { "@type": "OfferCatalog", "name": "Apple" },
+        { "@type": "OfferCatalog", "name": "Motorola" },
+        { "@type": "OfferCatalog", "name": "Xiaomi" }
+      ]
+    }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
@@ -257,6 +281,25 @@
             Los ultimos modelos de Samsung, Apple, Motorola y Xiaomi. Financiacion en cuotas, garantia oficial y envio a todo el pais.
           </p>
 
+          <!-- Quick search -->
+          <div class="relative max-w-md mx-auto lg:mx-0 mb-6 fade-up fade-up-delay-3">
+            <div class="flex items-center bg-white/[0.06] backdrop-blur-md rounded-2xl border border-white/[0.1] overflow-hidden h-14">
+              <svg class="w-5 h-5 text-zinc-500 ml-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+              <input id="heroSearch" type="text" placeholder="Buscar... ej: iPhone 17 Pro Max" class="bg-transparent text-sm outline-none w-full px-4 py-3 placeholder:text-zinc-600" onkeydown="if(event.key==='Enter'){heroSearchGo()}" />
+              <button onclick="heroSearchGo()" class="bg-brand-500 text-black font-bold px-6 h-full text-sm hover:bg-brand-600 transition-colors flex-shrink-0">Buscar</button>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-3 justify-center lg:justify-start">
+              <span class="text-xs text-zinc-600">Popular:</span>
+              <button onclick="document.getElementById('heroSearch').value='iPhone 17';heroSearchGo()" class="text-xs text-zinc-400 hover:text-brand-400 transition-colors cursor-pointer">iPhone 17</button>
+              <span class="text-zinc-700">·</span>
+              <button onclick="document.getElementById('heroSearch').value='iPhone Air';heroSearchGo()" class="text-xs text-zinc-400 hover:text-brand-400 transition-colors cursor-pointer">iPhone Air</button>
+              <span class="text-zinc-700">·</span>
+              <button onclick="document.getElementById('heroSearch').value='Galaxy S25';heroSearchGo()" class="text-xs text-zinc-400 hover:text-brand-400 transition-colors cursor-pointer">Galaxy S25</button>
+              <span class="text-zinc-700">·</span>
+              <button onclick="document.getElementById('heroSearch').value='Xiaomi';heroSearchGo()" class="text-xs text-zinc-400 hover:text-brand-400 transition-colors cursor-pointer">Xiaomi</button>
+            </div>
+          </div>
+
           <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start fade-up fade-up-delay-3">
             <a href="#productos" class="btn-primary inline-flex items-center justify-center gap-2.5 text-black font-bold h-14 px-10 rounded-2xl text-base">
               Ver Catalogo
@@ -345,6 +388,28 @@
       <div class="w-6 h-10 rounded-full border-2 border-zinc-600 flex justify-center pt-2">
         <div class="w-1.5 h-3 bg-zinc-500 rounded-full animate-bounce"></div>
       </div>
+    </div>
+  </section>
+
+  <!-- PROMO BANNER -->
+  <section class="py-4 px-4 bg-gradient-to-r from-brand-600/20 via-brand-500/10 to-brand-600/20 border-y border-brand-500/10">
+    <div class="max-w-7xl mx-auto flex items-center justify-center gap-6 md:gap-12 text-sm flex-wrap">
+      <span class="flex items-center gap-2 text-brand-400 font-semibold">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>
+        12 cuotas sin interes
+      </span>
+      <span class="flex items-center gap-2 text-zinc-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+        Envio gratis
+      </span>
+      <span class="flex items-center gap-2 text-zinc-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+        Garantia oficial
+      </span>
+      <span class="flex items-center gap-2 text-zinc-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+        Compra segura
+      </span>
     </div>
   </section>
 
@@ -784,6 +849,9 @@
       const oldPrice = hasDiscount
         ? `<p class="text-xs text-zinc-600 line-through">${fmt(p.precioAnterior)}</p>`
         : '';
+      const savingBadge = hasDiscount
+        ? `<span class="text-[10px] text-green-400 font-semibold">Ahorrás ${fmt(p.precioAnterior - p.precio)}</span>`
+        : '';
       const specs = (p.specs || []).slice(0, 3).map(s =>
         `<span class="text-[11px] px-2 py-0.5 rounded-lg bg-white/[0.04] text-zinc-500 border border-white/[0.04]">${s}</span>`
       ).join('');
@@ -811,6 +879,7 @@
               ${oldPrice}
               <p class="text-xl font-black text-brand-400">${fmt(p.precio)}</p>
               <p class="text-[11px] text-zinc-500 mt-0.5">12x ${fmt(Math.round(p.precio / 12))} sin interes</p>
+              ${savingBadge}
               ${p.stock <= 3 && p.stock > 0 ? `<p class="text-[11px] text-orange-400 font-semibold mt-1">Ultimas ${p.stock} unidades!</p>` : ''}
               ${p.stock === 0 ? `<p class="text-[11px] text-red-400 font-semibold mt-1">Sin stock</p>` : ''}
             </div>
@@ -1222,6 +1291,16 @@
     // ============================
     //  INIT
     // ============================
+    function heroSearchGo() {
+      const q = document.getElementById('heroSearch').value.trim();
+      if (!q) return;
+      searchTerm = q;
+      const searchFilter = document.getElementById('searchFilter');
+      if (searchFilter) searchFilter.value = q;
+      document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
+      renderProducts();
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       fetchProducts();
       initScrollReveal();

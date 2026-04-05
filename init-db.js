@@ -40,6 +40,14 @@ db.exec(`
     key TEXT PRIMARY KEY,
     value TEXT
   );
+
+  CREATE TABLE IF NOT EXISTS stock_alerts (
+    id INTEGER PRIMARY KEY,
+    producto_id INTEGER NOT NULL,
+    email TEXT,
+    telefono TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Catálogo completo - Precios Argentina Abril 2026 (post arancel 0%)

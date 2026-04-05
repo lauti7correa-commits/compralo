@@ -168,6 +168,12 @@
           </svg>
           Pedidos
         </button>
+        <button onclick="showTab('analytics')" id="navAnalytics" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 text-left">
+          <svg class="w-[18px] h-[18px] opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
+          </svg>
+          Analytics
+        </button>
       </nav>
 
       <!-- User / Logout -->
@@ -285,6 +291,10 @@
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
                 CSV
               </button>
+              <button onclick="showBulkPriceModal()" class="btn-ghost px-3 py-2 rounded-xl text-sm whitespace-nowrap flex items-center gap-1.5" title="Actualizar precios masivamente">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                % Precios
+              </button>
               <button onclick="openNewProductModal()" class="btn-primary px-4 py-2 rounded-xl text-sm whitespace-nowrap flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                 Agregar
@@ -342,7 +352,108 @@
           </div>
         </section>
 
+        <!-- ==================== ANALYTICS ==================== -->
+        <section id="secAnalytics" class="hidden fade-in">
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+            <div class="stat-card glass rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Valor inventario</span>
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+              </div>
+              <p id="analyticsInventario" class="text-3xl font-bold tracking-tight">--</p>
+              <p class="text-xs text-gray-500 mt-1">Stock total valorizado</p>
+            </div>
+            <div class="stat-card glass rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Ticket promedio</span>
+                <div class="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                </div>
+              </div>
+              <p id="analyticsTicket" class="text-3xl font-bold tracking-tight">--</p>
+              <p class="text-xs text-gray-500 mt-1">Promedio por pedido</p>
+            </div>
+            <div class="stat-card glass rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Productos en oferta</span>
+                <div class="w-9 h-9 rounded-xl bg-red-500/10 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z"/></svg>
+                </div>
+              </div>
+              <p id="analyticsOfertas" class="text-3xl font-bold tracking-tight">--</p>
+              <p class="text-xs text-gray-500 mt-1">Con precio anterior</p>
+            </div>
+            <div class="stat-card glass rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Alertas stock</span>
+                <div class="w-9 h-9 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+                </div>
+              </div>
+              <p id="analyticsAlerts" class="text-3xl font-bold tracking-tight">--</p>
+              <p class="text-xs text-gray-500 mt-1">Registradas</p>
+            </div>
+          </div>
+
+          <!-- Stock by brand -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="glass rounded-2xl p-5">
+              <h3 class="font-semibold text-sm mb-4">Stock por marca</h3>
+              <div id="analyticsBrandStock" class="space-y-3">
+                <div class="text-center text-gray-500 text-sm py-4">Cargando...</div>
+              </div>
+            </div>
+            <div class="glass rounded-2xl p-5">
+              <h3 class="font-semibold text-sm mb-4">Pedidos por estado</h3>
+              <div id="analyticsOrderStatus" class="space-y-3">
+                <div class="text-center text-gray-500 text-sm py-4">Cargando...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top products -->
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-white/[0.06]">
+              <h3 class="font-semibold text-sm">Productos con stock bajo (&lt; 5 unidades)</h3>
+            </div>
+            <div id="analyticsLowStock" class="divide-y divide-white/[0.04]">
+              <div class="px-5 py-8 text-center text-gray-500 text-sm">Cargando...</div>
+            </div>
+          </div>
+        </section>
+
       </main>
+    </div>
+  </div>
+
+  <!-- ==================== BULK PRICE MODAL ==================== -->
+  <div id="bulkPriceModal" class="modal-overlay fixed inset-0 z-50 hidden items-center justify-center p-4" onclick="if(event.target===this)closeBulkModal()">
+    <div class="glass-strong rounded-2xl w-full max-w-md p-6 slide-up">
+      <h3 class="text-lg font-bold mb-4">Actualizar precios masivamente</h3>
+      <p class="text-sm text-gray-400 mb-4">Aplica un porcentaje de aumento o descuento a todos los productos activos.</p>
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-medium text-gray-400 mb-1.5 block">Marca (opcional)</label>
+          <select id="bulkMarca" class="w-full px-4 py-2.5 rounded-xl text-sm">
+            <option value="">Todas las marcas</option>
+            <option value="Apple">Apple</option>
+            <option value="Samsung">Samsung</option>
+            <option value="Motorola">Motorola</option>
+            <option value="Xiaomi">Xiaomi</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-400 mb-1.5 block">Porcentaje (%)</label>
+          <input id="bulkPercent" type="number" class="w-full px-4 py-2.5 rounded-xl text-sm" placeholder="Ej: 10 para subir 10%, -5 para bajar 5%">
+        </div>
+        <p id="bulkPreview" class="text-xs text-gray-500"></p>
+      </div>
+      <div class="flex gap-3 mt-6">
+        <button onclick="closeBulkModal()" class="btn-ghost flex-1 py-2.5 rounded-xl text-sm">Cancelar</button>
+        <button onclick="applyBulkPrice()" class="btn-primary flex-1 py-2.5 rounded-xl text-sm">Aplicar</button>
+      </div>
     </div>
   </div>
 
@@ -542,8 +653,8 @@
     // ============================================================
     //  TABS
     // ============================================================
-    const tabs = ['dashboard', 'productos', 'pedidos'];
-    const tabTitles = { dashboard: 'Dashboard', productos: 'Productos', pedidos: 'Pedidos' };
+    const tabs = ['dashboard', 'productos', 'pedidos', 'analytics'];
+    const tabTitles = { dashboard: 'Dashboard', productos: 'Productos', pedidos: 'Pedidos', analytics: 'Analytics' };
 
     function showTab(tab) {
       // Update sidebar
@@ -575,6 +686,7 @@
       if (tab === 'dashboard') loadDashboard();
       if (tab === 'productos') loadProductos();
       if (tab === 'pedidos') loadPedidos();
+      if (tab === 'analytics') loadAnalytics();
     }
 
     // ============================================================
@@ -832,6 +944,7 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
         ['productModal', 'deleteModal'].forEach(hideModal);
+        closeBulkModal();
       }
     });
 
@@ -929,6 +1042,128 @@
         const pedido = allPedidos.find(p => p.id === id);
         if (pedido) pedido.estado = estado;
       }
+    }
+
+    // ============================================================
+    //  BULK PRICE UPDATE
+    // ============================================================
+    function showBulkPriceModal() {
+      document.getElementById('bulkPriceModal').classList.remove('hidden');
+      document.getElementById('bulkPriceModal').classList.add('flex');
+    }
+    function closeBulkModal() {
+      document.getElementById('bulkPriceModal').classList.remove('flex');
+      document.getElementById('bulkPriceModal').classList.add('hidden');
+    }
+    async function applyBulkPrice() {
+      const marca = document.getElementById('bulkMarca').value;
+      const percent = parseFloat(document.getElementById('bulkPercent').value);
+      if (isNaN(percent) || percent === 0) { showToast('Ingresa un porcentaje valido', 'error'); return; }
+      const targets = allProductos.filter(p => p.activo && (!marca || p.marca === marca));
+      if (targets.length === 0) { showToast('No hay productos para actualizar', 'error'); return; }
+
+      let updated = 0;
+      for (const p of targets) {
+        const newPrice = Math.round(p.precio * (1 + percent / 100));
+        const result = await apiFetch('/api/admin/productos/' + p.id, {
+          method: 'PUT',
+          body: JSON.stringify({ precio: newPrice, precioAnterior: p.precio })
+        });
+        if (result) updated++;
+      }
+
+      showToast(updated + ' productos actualizados (' + (percent > 0 ? '+' : '') + percent + '%)');
+      closeBulkModal();
+      loadProductos();
+    }
+
+    // ============================================================
+    //  ANALYTICS
+    // ============================================================
+    async function loadAnalytics() {
+      const [productos, pedidos, alerts] = await Promise.all([
+        apiFetch('/api/admin/productos'),
+        apiFetch('/api/admin/pedidos'),
+        apiFetch('/api/admin/stock-alerts')
+      ]);
+
+      if (productos) {
+        const activos = productos.filter(p => p.activo);
+        const inventarioVal = activos.reduce((sum, p) => sum + (p.precio * (p.stock || 0)), 0);
+        document.getElementById('analyticsInventario').textContent = fmt(inventarioVal);
+
+        const ofertas = activos.filter(p => p.precioAnterior && p.precioAnterior > p.precio);
+        document.getElementById('analyticsOfertas').textContent = ofertas.length;
+
+        // Stock by brand
+        const brands = {};
+        activos.forEach(p => {
+          const brand = p.marca || 'Sin marca';
+          if (!brands[brand]) brands[brand] = { count: 0, stock: 0 };
+          brands[brand].count++;
+          brands[brand].stock += (p.stock || 0);
+        });
+        const brandContainer = document.getElementById('analyticsBrandStock');
+        const maxStock = Math.max(...Object.values(brands).map(b => b.stock), 1);
+        brandContainer.innerHTML = Object.entries(brands).sort((a, b) => b[1].stock - a[1].stock).map(([brand, data]) => {
+          const pct = Math.round((data.stock / maxStock) * 100);
+          return `
+            <div>
+              <div class="flex items-center justify-between text-sm mb-1">
+                <span class="font-medium">${esc(brand)}</span>
+                <span class="text-gray-400">${data.count} productos / ${data.stock} uds</span>
+              </div>
+              <div class="h-2 bg-surface-2 rounded-full overflow-hidden">
+                <div class="h-full bg-brand-500 rounded-full transition-all" style="width:${pct}%"></div>
+              </div>
+            </div>`;
+        }).join('');
+
+        // Low stock
+        const lowStock = activos.filter(p => (p.stock || 0) < 5).sort((a, b) => (a.stock || 0) - (b.stock || 0));
+        const lowStockContainer = document.getElementById('analyticsLowStock');
+        if (lowStock.length === 0) {
+          lowStockContainer.innerHTML = '<div class="px-5 py-8 text-center text-gray-500 text-sm">Todos los productos tienen stock suficiente.</div>';
+        } else {
+          lowStockContainer.innerHTML = lowStock.map(p => `
+            <div class="px-5 py-3 flex items-center justify-between table-row">
+              <div class="min-w-0">
+                <p class="text-sm font-medium truncate">${esc(p.nombre)}</p>
+                <p class="text-xs text-gray-500">${esc(p.marca || '')}</p>
+              </div>
+              <div class="flex items-center gap-3 flex-shrink-0">
+                <span class="text-sm font-semibold ${(p.stock || 0) === 0 ? 'text-red-400' : 'text-orange-400'}">${p.stock || 0} uds</span>
+                <span class="text-sm text-gray-400">${fmt(p.precio)}</span>
+              </div>
+            </div>`).join('');
+        }
+      }
+
+      if (pedidos && pedidos.length > 0) {
+        const validPedidos = pedidos.filter(p => p.estado !== 'cancelado');
+        const avgTicket = validPedidos.length > 0
+          ? Math.round(validPedidos.reduce((sum, p) => sum + (p.total || 0), 0) / validPedidos.length)
+          : 0;
+        document.getElementById('analyticsTicket').textContent = fmt(avgTicket);
+
+        // Orders by status
+        const statuses = {};
+        pedidos.forEach(p => {
+          const estado = p.estado || 'pendiente';
+          statuses[estado] = (statuses[estado] || 0) + 1;
+        });
+        const statusContainer = document.getElementById('analyticsOrderStatus');
+        statusContainer.innerHTML = Object.entries(statuses).map(([estado, count]) => `
+          <div class="flex items-center justify-between">
+            <span class="badge badge-${estado}">${estado}</span>
+            <span class="text-sm font-semibold">${count}</span>
+          </div>`).join('');
+      } else {
+        document.getElementById('analyticsTicket').textContent = fmt(0);
+        document.getElementById('analyticsOrderStatus').innerHTML = '<div class="text-center text-gray-500 text-sm py-4">Sin pedidos</div>';
+      }
+
+      document.getElementById('analyticsAlerts').textContent = alerts ? alerts.length : 0;
     }
 
     function exportProductos() {

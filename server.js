@@ -8,11 +8,22 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const ADMIN_KEY = process.env.ADMIN_KEY || 'Compralo2026!Adm';
-const WHATSAPP_NUMBER = process.env.WHATSAPP_NUMBER || '5491112345678';
+const WHATSAPP_NUMBER = process.env.WHATSAPP_NUMBER || '5491153433359';
 
 // Base de datos
 const db = new Database(path.join(__dirname, 'compralo.db'));
 db.pragma('journal_mode = WAL');
+
+// Ensure stock_alerts table exists
+db.exec(`
+  CREATE TABLE IF NOT EXISTS stock_alerts (
+    id INTEGER PRIMARY KEY,
+    producto_id INTEGER NOT NULL,
+    email TEXT,
+    telefono TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+  );
+`);
 
 // =============================
 // MIDDLEWARES
@@ -52,6 +63,53 @@ const pedidosLimiter = rateLimit({
 
 // Body parser con límite de tamaño
 app.use(express.json({ limit: '1mb' }));
+
+// =============================
+// UTILIDADES (slugify)
+// =============================
+function slugify(text) {
+  return text.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+// =============================
+// SEO: Individual product pages
+// =============================
+const fs = require('fs');
+
+// Individual product page (SEO-friendly URL)
+app.get('/producto/:slug', (req, res) => {
+  const slug = req.params.slug;
+  // Find product by slug (generated from nombre)
+  const productos = db.prepare('SELECT * FROM productos WHERE activo = 1').all();
+  const product = productos.find(p => slugify(p.nombre) === slug);
+  if (!product) return res.redirect('/');
+
+  // Read index.html and inject product meta tags for SEO
+  let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+
+  // Replace meta tags for this specific product
+  const specs = product.specs ? JSON.parse(product.specs) : [];
+  const specsText = specs.join(', ');
+  html = html.replace(
+    '<title>Compralo - Los mejores celulares al mejor precio</title>',
+    `<title>${product.nombre} | Compralo</title>`
+  );
+  html = html.replace(
+    'content="Encontra los ultimos modelos de Samsung, Apple, Motorola y Xiaomi con financiacion, envio gratis y garantia oficial."',
+    `content="${product.nombre} - ${specsText}. ${product.marca} al mejor precio con financiacion en 12 cuotas sin interes y envio gratis."`
+  );
+  html = html.replace(
+    'content="Compralo - Los mejores celulares al mejor precio"',
+    `content="${product.nombre} | Compralo"`
+  );
+  // Add auto-open modal script
+  html = html.replace('</body>', `<script>document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>openModal(${product.id}),500)})</script></body>`);
+
+  res.type('html').send(html);
+});
 
 // Archivos estáticos (no-cache para HTML)
 app.use(express.static(__dirname, {
@@ -193,6 +251,18 @@ app.get('/api/categorias', (req, res) => {
   }
 });
 
+// Producto por slug (SEO-friendly)
+app.get('/api/productos/slug/:slug', (req, res) => {
+  try {
+    const productos = db.prepare('SELECT * FROM productos WHERE activo = 1').all();
+    const product = productos.find(p => slugify(p.nombre) === req.params.slug);
+    if (!product) return errorResponse(res, 'Producto no encontrado', 404);
+    return successResponse(res, parseProductSpecs(product));
+  } catch (err) {
+    return errorResponse(res, 'Error al obtener producto', 500);
+  }
+});
+
 // Producto individual
 app.get('/api/productos/:id', (req, res) => {
   try {
@@ -301,6 +371,21 @@ app.post('/api/pedidos/whatsapp', pedidosLimiter, (req, res) => {
     }, 201);
   } catch (err) {
     return errorResponse(res, 'Error al crear pedido', 500);
+  }
+});
+
+// Stock alert registration
+app.post('/api/stock-alert', (req, res) => {
+  try {
+    const productoId = req.body.producto_id;
+    const email = sanitize(req.body.email || '');
+    const telefono = sanitize(req.body.telefono || '');
+    if (!productoId) return errorResponse(res, 'Producto requerido');
+    if (!email && !telefono) return errorResponse(res, 'Email o telefono requerido');
+    db.prepare('INSERT INTO stock_alerts (producto_id, email, telefono) VALUES (?, ?, ?)').run(productoId, email || null, telefono || null);
+    return successResponse(res, { mensaje: 'Alerta registrada' }, 201);
+  } catch (err) {
+    return errorResponse(res, 'Error al registrar alerta', 500);
   }
 });
 
@@ -466,6 +551,16 @@ app.get('/api/admin/stats', adminAuth, (req, res) => {
     });
   } catch (err) {
     return errorResponse(res, 'Error al obtener estadísticas', 500);
+  }
+});
+
+// Stock alerts (admin)
+app.get('/api/admin/stock-alerts', adminAuth, (req, res) => {
+  try {
+    const alerts = db.prepare('SELECT sa.*, p.nombre as producto_nombre FROM stock_alerts sa LEFT JOIN productos p ON sa.producto_id = p.id ORDER BY sa.created_at DESC').all();
+    return successResponse(res, alerts);
+  } catch (err) {
+    return errorResponse(res, 'Error al obtener alertas', 500);
   }
 });
 

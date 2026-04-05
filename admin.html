@@ -80,6 +80,15 @@
     .pulse-dot { animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
+    /* Toast notifications */
+    .toast-container { position: fixed; top: 1rem; right: 1rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
+    .toast { pointer-events: auto; padding: 0.75rem 1.25rem; border-radius: 0.75rem; font-size: 0.85rem; font-weight: 500; color: #fff; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); animation: toastIn 0.3s ease forwards; display: flex; align-items: center; gap: 0.5rem; max-width: 360px; }
+    .toast-success { background: rgba(16,185,129,0.9); }
+    .toast-error { background: rgba(239,68,68,0.9); }
+    .toast-exit { animation: toastOut 0.25s ease forwards; }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(40px); } }
+
     @media (max-width: 1023px) {
       .sidebar { transform: translateX(-100%); position: fixed; z-index: 40; height: 100vh; }
       .sidebar.open { transform: translateX(0); }
@@ -89,6 +98,7 @@
   </style>
 </head>
 <body class="min-h-screen">
+  <div id="toastContainer" class="toast-container"></div>
 
   <!-- ==================== LOGIN ==================== -->
   <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4">
@@ -439,14 +449,34 @@
     function fmt(n) { return Number(n).toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }); }
     function fmtDate(d) { return new Date(d).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
 
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const icon = type === 'success'
+        ? '<svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>'
+        : '<svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>';
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = icon + `<span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add('toast-exit');
+        setTimeout(() => toast.remove(), 250);
+      }, 3000);
+    }
+
     async function apiFetch(url, opts = {}) {
       const headers = { ...opts.headers, 'X-Admin-Key': adminKey, 'Content-Type': 'application/json' };
       try {
         const res = await fetch(API + url, { ...opts, headers });
-        if (res.status === 401) { doLogout(); return null; }
+        if (res.status === 401) { showToast('Sesión expirada, ingresá de nuevo', 'error'); doLogout(); return null; }
         const json = await res.json();
-        return json.success ? json.data : null;
+        if (!json.success) {
+          showToast(json.error || 'Error en la operación', 'error');
+          return null;
+        }
+        return json.data;
       } catch (err) {
+        showToast('Error de conexión con el servidor', 'error');
         return null;
       }
     }
@@ -706,12 +736,14 @@
       e.preventDefault();
       const id = document.getElementById('pf_id').value;
       const specsRaw = document.getElementById('pf_specs').value;
+      const precioAnteriorRaw = document.getElementById('pf_precioAnterior').value.trim();
+      const precioAnterior = precioAnteriorRaw ? parseInt(precioAnteriorRaw) : null;
       const body = {
         nombre: document.getElementById('pf_nombre').value.trim(),
         marca: document.getElementById('pf_marca').value.trim(),
         categoria: document.getElementById('pf_categoria').value.trim(),
         precio: parseInt(document.getElementById('pf_precio').value) || 0,
-        precioAnterior: parseInt(document.getElementById('pf_precioAnterior').value) || null,
+        precioAnterior: (precioAnterior && !isNaN(precioAnterior)) ? precioAnterior : null,
         stock: parseInt(document.getElementById('pf_stock').value) || 0,
         destacado: document.getElementById('pf_destacado').checked,
         nuevo: document.getElementById('pf_nuevo').checked,
@@ -719,14 +751,25 @@
         imagen_url: document.getElementById('pf_imagen').value.trim() || null,
       };
 
-      if (id) {
-        await apiFetch('/api/admin/productos/' + id, { method: 'PUT', body: JSON.stringify(body) });
-      } else {
-        await apiFetch('/api/admin/productos', { method: 'POST', body: JSON.stringify(body) });
-      }
+      if (!body.nombre) { showToast('El nombre es obligatorio', 'error'); return; }
+      if (!body.precio || body.precio <= 0) { showToast('El precio debe ser mayor a 0', 'error'); return; }
 
-      closeProductModal();
-      loadProductos();
+      try {
+        let result;
+        if (id) {
+          result = await apiFetch('/api/admin/productos/' + id, { method: 'PUT', body: JSON.stringify(body) });
+        } else {
+          result = await apiFetch('/api/admin/productos', { method: 'POST', body: JSON.stringify(body) });
+        }
+
+        if (result) {
+          showToast(id ? 'Producto actualizado' : 'Producto creado correctamente');
+          closeProductModal();
+          loadProductos();
+        }
+      } catch (err) {
+        showToast('Error al guardar el producto', 'error');
+      }
     }
 
     // ============================================================
@@ -744,12 +787,16 @@
     function closeDeleteModal() { hideModal('deleteModal'); }
 
     async function toggleProductActivo(id, activo) {
+      let result;
       if (activo) {
-        await apiFetch('/api/admin/productos/' + id, { method: 'PUT', body: JSON.stringify({ activo: true }) });
+        result = await apiFetch('/api/admin/productos/' + id, { method: 'PUT', body: JSON.stringify({ activo: true }) });
       } else {
-        await apiFetch('/api/admin/productos/' + id, { method: 'DELETE' });
+        result = await apiFetch('/api/admin/productos/' + id, { method: 'DELETE' });
       }
-      loadProductos();
+      if (result) {
+        showToast(activo ? 'Producto activado' : 'Producto desactivado');
+        loadProductos();
+      }
     }
 
     // ============================================================
@@ -871,10 +918,12 @@
     }
 
     async function updatePedidoEstado(id, estado) {
-      await apiFetch('/api/admin/pedidos/' + id, { method: 'PUT', body: JSON.stringify({ estado }) });
-      // Update local state
-      const pedido = allPedidos.find(p => p.id === id);
-      if (pedido) pedido.estado = estado;
+      const result = await apiFetch('/api/admin/pedidos/' + id, { method: 'PUT', body: JSON.stringify({ estado }) });
+      if (result) {
+        showToast('Pedido actualizado a ' + estado);
+        const pedido = allPedidos.find(p => p.id === id);
+        if (pedido) pedido.estado = estado;
+      }
     }
   </script>
 </body>

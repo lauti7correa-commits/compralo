@@ -488,9 +488,6 @@ function getHtml() {
 app.get('/', (req, res) => {
   res.type('html').send(getHtml());
 });
-app.get('/{0,}', (req, res) => {
-  res.type('html').send(getHtml());
-});
 
 // Global error handler
 app.use((err, req, res, next) => {

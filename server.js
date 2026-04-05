@@ -469,25 +469,7 @@ app.get('/api/admin/stats', adminAuth, (req, res) => {
   }
 });
 
-// Servir index.html con patches aplicados en runtime
-const fs = require('fs');
-let cachedHtml = null;
-function getHtml() {
-  if (!cachedHtml) {
-    let html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
-    html = html.replace(
-      'allProducts = await res.json()',
-      'const _json = await res.json(); allProducts = Array.isArray(_json) ? _json : (_json.data || [])'
-    );
-    html = html.replace(/max="3000000" value="3000000"/g, 'max="5000000" value="5000000"');
-    html = html.replace('let maxPrice = 3000000', 'let maxPrice = 5000000');
-    cachedHtml = html;
-  }
-  return cachedHtml;
-}
-app.get('/', (req, res) => {
-  res.type('html').send(getHtml());
-});
+// Servir index.html (express.static lo maneja directamente)
 
 // Global error handler
 app.use((err, req, res, next) => {

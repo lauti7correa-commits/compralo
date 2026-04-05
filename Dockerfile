@@ -5,12 +5,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev
 
-ARG SOURCE_COMMIT=unknown
-RUN echo "Deploying commit: ${SOURCE_COMMIT}" > /tmp/build_info
-
 COPY . .
 
-RUN cat index.html | grep -c "Array.isArray" && cat server.js | head -1
+RUN echo "Build $(date +%s)" > /tmp/build_info && \
+    cat index.html | grep -c "Array.isArray" && \
+    echo "index.html OK - unwrap present"
 
 RUN node init-db.js
 

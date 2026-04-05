@@ -17,6 +17,7 @@
   <meta name="twitter:title" content="Compralo - Los mejores celulares al mejor precio" />
   <meta name="twitter:description" content="Samsung, Apple, Motorola y Xiaomi con financiacion y envio gratis." />
   <meta name="theme-color" content="#10b981" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>📱</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet" />
@@ -412,8 +413,15 @@
             <div class="flex items-center gap-3 flex-1 sm:max-w-sm">
               <span class="text-xs text-zinc-500 whitespace-nowrap">Precio max:</span>
               <input id="priceRange" type="range" min="0" max="5000000" value="5000000" step="50000" class="flex-1" oninput="filterProducts(); document.getElementById('priceLabel').textContent = fmt(Number(this.value));" />
-              <span id="priceLabel" class="text-xs text-brand-400 font-semibold min-w-[90px] text-right">$3.000.000</span>
+              <span id="priceLabel" class="text-xs text-brand-400 font-semibold min-w-[90px] text-right">$5.000.000</span>
             </div>
+            <select id="sortSelect" onchange="filterProducts()" class="text-sm rounded-xl px-3 py-2.5 border border-white/[0.06] bg-white/[0.04] text-zinc-300 cursor-pointer min-w-[140px]">
+              <option value="relevancia">Relevancia</option>
+              <option value="precio-asc">Menor precio</option>
+              <option value="precio-desc">Mayor precio</option>
+              <option value="nuevo">Más nuevos</option>
+              <option value="oferta">Ofertas primero</option>
+            </select>
           </div>
         </div>
       </div>
@@ -429,6 +437,9 @@
         <div class="skeleton h-[420px]"></div>
         <div class="skeleton h-[420px]"></div>
       </div>
+
+      <!-- Result count -->
+      <p id="resultCount" class="text-sm text-zinc-500 mb-4"></p>
 
       <!-- Product Grid -->
       <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 hidden">
@@ -658,6 +669,11 @@
   <!-- TOAST CONTAINER -->
   <div id="toastContainer" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] flex flex-col gap-2 items-center pointer-events-none"></div>
 
+  <!-- SCROLL TO TOP -->
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-24 z-40 w-12 h-12 rounded-full bg-white/[0.08] backdrop-blur-md border border-white/[0.1] flex items-center justify-center text-zinc-400 hover:text-brand-400 hover:border-brand-400/30 transition-all duration-300 opacity-0 pointer-events-none" style="transition: opacity 0.3s, transform 0.3s;">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
+  </button>
+
   <!-- FLOATING WHATSAPP BUTTON -->
   <a href="https://wa.me/5491112345678?text=Hola!%20Quiero%20info%20sobre%20celulares" target="_blank" class="fixed bottom-6 right-6 z-40 group">
     <div class="w-16 h-16 bg-gradient-to-br from-[#25d366] to-[#128c7e] rounded-full flex items-center justify-center shadow-xl shadow-[#25d366]/20 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-[#25d366]/30 transition-all duration-300">
@@ -693,7 +709,11 @@
     // ============================
     const fmt = (n) => n.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
     const disc = (p, a) => Math.round(((a - p) / a) * 100);
-    const getImgUrl = (name) => `https://placehold.co/400x400/1a1a1a/10b981?text=${encodeURIComponent(name.replace(/ /g, '+'))}`;
+    const fallbackImg = (name) => `https://placehold.co/400x400/1a1a1a/10b981?text=${encodeURIComponent(name.replace(/ /g, '+'))}`;
+    const getImgUrl = (product) => {
+      if (typeof product === 'string') return fallbackImg(product);
+      return product.imagen_url || fallbackImg(product.nombre);
+    };
     const waUrl = (text) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
 
     // ============================
@@ -774,7 +794,7 @@
         <div class="glass-card rounded-2xl cursor-pointer overflow-hidden group" onclick="openModal(${p.id})">
           <div class="p-4">
             <div class="relative aspect-square bg-gradient-to-br from-white/[0.04] to-transparent rounded-xl mb-4 flex items-center justify-center overflow-hidden">
-              <img src="${getImgUrl(p.nombre)}" alt="${p.nombre}" class="card-img w-full h-full object-cover rounded-xl" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+              <img src="${getImgUrl(p)}" alt="${p.nombre}" class="card-img w-full h-full object-contain rounded-xl p-2" loading="lazy" onerror="this.src=fallbackImg(this.alt);this.classList.replace('object-contain','object-cover');this.classList.remove('p-2');" />
               <div class="hidden w-20 h-20 text-zinc-700 items-center justify-center">
                 <svg class="w-20 h-20" fill="none" stroke="currentColor" stroke-width="0.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
               </div>
@@ -791,6 +811,8 @@
               ${oldPrice}
               <p class="text-xl font-black text-brand-400">${fmt(p.precio)}</p>
               <p class="text-[11px] text-zinc-500 mt-0.5">12x ${fmt(Math.round(p.precio / 12))} sin interes</p>
+              ${p.stock <= 3 && p.stock > 0 ? `<p class="text-[11px] text-orange-400 font-semibold mt-1">Ultimas ${p.stock} unidades!</p>` : ''}
+              ${p.stock === 0 ? `<p class="text-[11px] text-red-400 font-semibold mt-1">Sin stock</p>` : ''}
             </div>
             <div class="flex gap-2 mt-4">
               <button onclick="event.stopPropagation();addToCart(${p.id})" class="btn-ghost flex-1 flex items-center justify-center gap-1.5 text-brand-400 rounded-xl h-10 text-sm font-semibold">
@@ -815,7 +837,7 @@
         <div class="min-w-[280px] sm:min-w-[300px] glass-card rounded-2xl cursor-pointer overflow-hidden group" onclick="openModal(${p.id})">
           <div class="p-4">
             <div class="relative aspect-square bg-gradient-to-br from-white/[0.04] to-transparent rounded-xl mb-4 flex items-center justify-center overflow-hidden">
-              <img src="${getImgUrl(p.nombre)}" alt="${p.nombre}" class="card-img w-full h-full object-cover rounded-xl" loading="lazy" />
+              <img src="${getImgUrl(p)}" alt="${p.nombre}" class="card-img w-full h-full object-contain rounded-xl p-2" loading="lazy" onerror="this.src=fallbackImg(this.alt);this.classList.replace('object-contain','object-cover');this.classList.remove('p-2');" />
               ${discBadge}
             </div>
             <p class="text-[11px] text-zinc-500 uppercase tracking-widest font-medium">${p.marca}</p>
@@ -851,9 +873,10 @@
 
     function renderProducts() {
       const priceRangeEl = document.getElementById('priceRange');
-      const maxPriceVal = priceRangeEl ? Number(priceRangeEl.value) : 3000000;
+      const maxPriceVal = priceRangeEl ? Number(priceRangeEl.value) : 5000000;
+      const sortVal = document.getElementById('sortSelect')?.value || 'relevancia';
 
-      const filtered = allProducts.filter(p => {
+      let filtered = allProducts.filter(p => {
         const matchCat = currentCategory === 'Todos' || p.categoria === currentCategory || p.marca === currentCategory;
         const matchSearch = !searchTerm ||
           p.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -862,15 +885,28 @@
         return matchCat && matchSearch && matchPrice;
       });
 
+      // Sort
+      const sorted = [...filtered];
+      if (sortVal === 'precio-asc') sorted.sort((a, b) => a.precio - b.precio);
+      else if (sortVal === 'precio-desc') sorted.sort((a, b) => b.precio - a.precio);
+      else if (sortVal === 'nuevo') sorted.sort((a, b) => (b.nuevo || 0) - (a.nuevo || 0));
+      else if (sortVal === 'oferta') sorted.sort((a, b) => {
+        const dA = a.precioAnterior ? ((a.precioAnterior - a.precio) / a.precioAnterior) : 0;
+        const dB = b.precioAnterior ? ((b.precioAnterior - b.precio) / b.precioAnterior) : 0;
+        return dB - dA;
+      });
+
       const grid = document.getElementById('productGrid');
       const empty = document.getElementById('emptyState');
+      const countEl = document.getElementById('resultCount');
+      if (countEl) countEl.textContent = `${sorted.length} producto${sorted.length !== 1 ? 's' : ''}`;
 
-      if (filtered.length === 0) {
+      if (sorted.length === 0) {
         grid.innerHTML = '';
         empty.classList.remove('hidden');
       } else {
         empty.classList.add('hidden');
-        grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
+        grid.innerHTML = sorted.map(p => renderProductCard(p)).join('');
       }
     }
 
@@ -915,7 +951,7 @@
         items.innerHTML = cart.map(item => `
           <div class="flex gap-3 glass-card rounded-xl p-3">
             <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-              <img src="${getImgUrl(item.nombre)}" alt="${item.nombre}" class="w-full h-full object-cover" />
+              <img src="${getImgUrl(item)}" alt="${item.nombre}" class="w-full h-full object-contain p-1" onerror="this.src=fallbackImg(this.alt);this.classList.replace('object-contain','object-cover');this.classList.remove('p-1');" />
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm font-semibold truncate">${item.nombre}</p>
@@ -1059,7 +1095,7 @@
       document.getElementById('modalContent').innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="aspect-square bg-gradient-to-br from-white/[0.04] to-transparent rounded-2xl flex items-center justify-center overflow-hidden">
-            <img src="${getImgUrl(p.nombre)}" alt="${p.nombre}" class="w-full h-full object-cover rounded-2xl" />
+            <img src="${getImgUrl(p)}" alt="${p.nombre}" class="w-full h-full object-contain rounded-2xl p-4" onerror="this.src=fallbackImg(this.alt);this.classList.replace('object-contain','object-cover');this.classList.remove('p-4');" />
           </div>
           <div>
             <p class="text-sm text-zinc-500 uppercase tracking-widest font-medium">${p.marca}</p>
@@ -1115,12 +1151,24 @@
     function checkout() {
       if (cart.length === 0) return;
       const total = cart.reduce((s, i) => s + i.precio * i.cantidad, 0);
-      let msg = 'Hola! Quiero hacer un pedido:\n\n';
+      const itemCount = cart.reduce((s, i) => s + i.cantidad, 0);
+      let msg = `Hola! Quiero hacer un pedido (${itemCount} producto${itemCount > 1 ? 's' : ''}):\n\n`;
       cart.forEach(item => {
-        msg += `- ${item.nombre} x${item.cantidad} = ${fmt(item.precio * item.cantidad)}\n`;
+        msg += `• ${item.nombre} x${item.cantidad} — ${fmt(item.precio * item.cantidad)}\n`;
       });
-      msg += `\nTotal: ${fmt(total)}`;
+      msg += `\n💰 *Total: ${fmt(total)}*`;
+      msg += `\n📦 ${itemCount} producto${itemCount > 1 ? 's' : ''}`;
+      msg += `\n\nQuedo a la espera de confirmacion!`;
       window.open(waUrl(msg), '_blank');
+      // Also save order to backend
+      fetch('/api/pedidos/whatsapp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart.map(i => ({ id: i.id, nombre: i.nombre, cantidad: i.cantidad, precio: i.precio })),
+          total
+        })
+      }).catch(() => {});
     }
 
     function scrollCarousel(dir) {
@@ -1151,11 +1199,21 @@
       let lastScroll = 0;
       window.addEventListener('scroll', () => {
         const navbar = document.getElementById('navbar');
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
         const scrollY = window.scrollY;
         if (scrollY > 100) {
           navbar.style.borderBottomColor = 'rgba(255,255,255,0.06)';
         } else {
           navbar.style.borderBottomColor = 'rgba(255,255,255,0.02)';
+        }
+        if (scrollTopBtn) {
+          if (scrollY > 600) {
+            scrollTopBtn.style.opacity = '1';
+            scrollTopBtn.style.pointerEvents = 'auto';
+          } else {
+            scrollTopBtn.style.opacity = '0';
+            scrollTopBtn.style.pointerEvents = 'none';
+          }
         }
         lastScroll = scrollY;
       }, { passive: true });
